@@ -275,11 +275,10 @@ def _seed_database() -> None:
             contact_email="safiullah477845@gmail.com",
             github_url="https://github.com/SAFIULLAH012",
             linkedin_url="https://www.linkedin.com/in/safiullah012",
-            resume_url="cv/safi_ullah_cv.pdf",
-            site_title="Safi Ullah | Computer Science Student & ML Learner",
+            site_title="Safi Ullah | Computer Science & Machine Learning Portfolio",
             meta_description=(
-                "Portfolio of Safi Ullah — Computer Science Student & Machine Learning Enthusiast "
-                "showcasing projects in Python, ML, Computer Vision, and Web Development."
+                "Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, "
+                "Computer Science student at University of Layyah."
             ),
             hero_description=(
                 "Computer Science student passionate about Machine Learning and Computer Vision. "
