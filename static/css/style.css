@@ -104,15 +104,15 @@ nav#navbar {
 .social-links a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: var(--gray); transition: all 0.3s; font-size: 0.9rem; text-decoration: none; }
 .social-links a:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-3px); }
 .hero-image-wrapper { position: relative; display: flex; justify-content: center; align-items: center; align-self: center; flex-shrink: 0; width: 100%; margin-bottom: 1rem; }
-.hero-image-ring { position: relative; width: 320px; height: 320px; max-width: 100%; flex-shrink: 0; margin: 0 auto; }
+.hero-image-ring { position: relative; width: 250px; height: 250px; max-width: 100%; flex-shrink: 0; margin: 0 auto; }
 .hero-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: center top; border: 4px solid rgba(95, 188, 184, 0.3); box-shadow: 0 0 60px rgba(95, 188, 184, 0.2); }
-.rotating-border { position: absolute; top: -10px; left: -10px; right: -10px; bottom: -10px; border-radius: 50%; border: 2px dashed rgba(95, 188, 184, 0.4); animation: rotate 20s linear infinite; }
+.rotating-border { position: absolute; top: -8px; left: -8px; right: -8px; bottom: -8px; border-radius: 50%; border: 2px dashed rgba(95, 188, 184, 0.4); animation: rotate 20s linear infinite; }
 @keyframes rotate { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-.badge { position: absolute; background: var(--card); padding: 0.75rem 1rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.3); z-index: 2; }
-.badge-exp { top: 20px; right: -10px; }
-.badge-loc { bottom: 40px; left: -30px; }
+.badge { position: absolute; background: var(--card); padding: 0.55rem 0.85rem; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; gap: 0.4rem; font-size: 0.78rem; color: #fff; box-shadow: 0 10px 25px rgba(0,0,0,0.3); z-index: 2; }
+.badge-exp { top: 10px; right: -15px; }
+.badge-loc { bottom: 20px; left: -20px; }
 .badge i { color: var(--primary); }
-.badge-dot { width: 10px; height: 10px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 10px var(--primary); animation: pulse 2s infinite; }
+.badge-dot { width: 8px; height: 8px; background: var(--primary); border-radius: 50%; box-shadow: 0 0 8px var(--primary); animation: pulse 2s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
 
 /* Sections Common */
@@ -473,7 +473,7 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     .social-links { justify-content: center; }
     .about-grid, .contact-grid, .detail-header-grid, .detail-layout { grid-template-columns: 1fr; }
     .skills-grid, .projects-grid { grid-template-columns: repeat(2, 1fr); }
-    .hero-image-ring { width: 300px; height: 300px; margin: 0 auto; }
+    .hero-image-ring { width: 230px; height: 230px; margin: 0 auto; }
     .about-img-wrapper { order: -1; max-width: 400px; margin: 0 auto; }
     .timeline-card { flex-direction: column; text-align: left; align-items: flex-start; gap: 1rem; }
     .timeline-score { text-align: left; }
@@ -482,10 +482,11 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     .nav-links { display: none; }
     .hamburger { display: block; }
     .hero { padding: 5.5rem 0 2.5rem; min-height: auto; text-align: center; }
-    .hero-grid { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
-    .hero-image-wrapper { order: -1; justify-content: center; margin-top: 0.5rem; margin-bottom: 1.2rem; }
+    .hero-grid { grid-template-columns: 1fr; gap: 1.2rem; justify-items: center; }
+    .hero-image-wrapper { order: -1; justify-content: center; margin-top: 0.5rem; margin-bottom: 1rem; }
+    .hero-image-ring { width: 180px; height: 180px; margin: 0 auto; }
     .hero-content { order: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
-    .hero-subtitle { justify-content: center; width: 100%; }
+    .hero-subtitle { justify-content: center; width: 100%; font-size: 1.05rem; }
     .hero-role-wrapper { justify-content: center; font-size: 1.4rem; height: 2.2rem; min-height: 2.2rem; width: 100%; }
     .hero-name { font-size: 2.2rem; white-space: normal; text-align: center; }
     .hero-tags { align-items: center; width: 100%; }
@@ -496,6 +497,16 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     .form-row { grid-template-columns: 1fr; }
     .section-title { font-size: 2rem; }
     .skills-grid, .projects-grid { grid-template-columns: 1fr; }
-    .badge-exp { right: 0; }
-    .badge-loc { left: 0; }
+    .badge { padding: 0.4rem 0.65rem; font-size: 0.72rem; border-radius: 8px; }
+    .badge-exp { top: 5px; right: -5px; }
+    .badge-loc { bottom: 10px; left: -10px; }
+}
+@media (max-width: 480px) {
+    .hero { padding: 5rem 0 2rem; }
+    .hero-image-ring { width: 160px; height: 160px; }
+    .badge { padding: 0.35rem 0.55rem; font-size: 0.68rem; }
+    .badge-exp { top: 0; right: -5px; }
+    .badge-loc { bottom: 5px; left: -5px; }
+    .hero-name { font-size: 1.85rem; }
+    .hero-role-wrapper { font-size: 1.25rem; height: 2rem; min-height: 2rem; }
 }

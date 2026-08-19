@@ -18,7 +18,7 @@
                 <th>Icon</th>
                 <th>Name</th>
                 <th>Category</th>
-                <th>Proficiency</th>
+                <th>Proficiency & Level</th>
                 <th>Tags</th>
                 <th>Order</th>
                 <th>Actions</th>
@@ -34,7 +34,18 @@
                     <div class="admin-progress">
                         <div class="admin-progress-bar" style="width: {{ s.proficiency }}%"></div>
                     </div>
-                    <small>{{ s.proficiency }}%</small>
+                    <small>
+                        {{ s.proficiency }}% — 
+                        {% if s.proficiency >= 85 %}
+                            <strong style="color: var(--primary);">Advanced</strong>
+                        {% elif s.proficiency >= 70 %}
+                            <strong style="color: #38bdf8;">Intermediate to Advanced</strong>
+                        {% elif s.proficiency >= 50 %}
+                            <strong style="color: #fbbf24;">Intermediate</strong>
+                        {% else %}
+                            <strong style="color: #94a3b8;">Beginner to Intermediate</strong>
+                        {% endif %}
+                    </small>
                 </td>
                 <td>
                     {% if s.tags_list %}
@@ -94,8 +105,9 @@
 
             <div class="form-row-2">
                 <div class="form-group">
-                    <label for="skill_proficiency">Proficiency (0-100%)</label>
-                    <input type="number" id="skill_proficiency" name="proficiency" min="0" max="100" value="80" class="form-control">
+                    <label for="skill_proficiency">Proficiency (0-100% controls bar length)</label>
+                    <input type="number" id="skill_proficiency" name="proficiency" min="0" max="100" value="80" class="form-control" oninput="updateSkillLevelPreview(this.value)">
+                    <small id="skillLevelPreview" style="color: var(--primary); font-weight: 600; display: block; margin-top: 4px;">Level: Intermediate to Advanced</small>
                 </div>
                 <div class="form-group">
                     <label for="skill_display_order">Display Order</label>
@@ -119,10 +131,22 @@
 
 {% block extra_js %}
 <script>
+function getLevelText(val) {
+    val = parseInt(val) || 0;
+    if (val >= 85) return 'Advanced';
+    if (val >= 70) return 'Intermediate to Advanced';
+    if (val >= 50) return 'Intermediate';
+    return 'Beginner to Intermediate';
+}
+function updateSkillLevelPreview(val) {
+    const el = document.getElementById('skillLevelPreview');
+    if (el) el.textContent = 'Level: ' + getLevelText(val);
+}
 function openSkillModal() {
     document.getElementById('skillModalTitle').innerHTML = '<i class="fas fa-code"></i> Add Skill';
     document.getElementById('skillForm').reset();
     document.getElementById('skill_id').value = '';
+    updateSkillLevelPreview(80);
     document.getElementById('skillModal').style.display = 'flex';
 }
 function closeSkillModal() {
@@ -137,6 +161,7 @@ function editSkill(id, name, category, icon_class, proficiency, tags, display_or
     document.getElementById('skill_proficiency').value = proficiency;
     document.getElementById('skill_tags').value = tags;
     document.getElementById('skill_display_order').value = display_order;
+    updateSkillLevelPreview(proficiency);
     document.getElementById('skillModal').style.display = 'flex';
 }
 </script>

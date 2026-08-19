@@ -45,7 +45,7 @@
                 <div class="hero-image-wrapper reveal" aria-hidden="true">
                     <div class="hero-image-ring">
                         <div class="rotating-border"></div>
-                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" class="hero-img" loading="eager" width="350" height="350">
+                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" class="hero-img" loading="eager" width="250" height="250">
                         <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
                         <div class="badge badge-loc"><div class="badge-dot"></div><div>{{ settings.location }}</div></div>
                     </div>
@@ -142,11 +142,21 @@
                     <h3>{{ skill.name }}</h3>
                     <p>{{ skill.category }}</p>
                     {% if skill.proficiency %}
-                    <div class="proficiency-bar" role="progressbar" aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ skill.name }} proficiency {{ skill.proficiency }}%">
+                    <div class="proficiency-bar" role="progressbar" aria-valuenow="{{ skill.proficiency }}" aria-valuemin="0" aria-valuemax="100" aria-label="{{ skill.name }} proficiency">
                         <div class="progress-bar-bg">
                             <div class="progress-bar-fill" style="width: {{ skill.proficiency }}%"></div>
                         </div>
-                        <span class="prof-percent">{{ skill.proficiency }}%</span>
+                        <span class="prof-percent">
+                            {% if skill.proficiency >= 85 %}
+                                Advanced
+                            {% elif skill.proficiency >= 70 %}
+                                Intermediate to Advanced
+                            {% elif skill.proficiency >= 50 %}
+                                Intermediate
+                            {% else %}
+                                Beginner to Intermediate
+                            {% endif %}
+                        </span>
                     </div>
                     {% endif %}
                     {% if skill.tags_list %}
