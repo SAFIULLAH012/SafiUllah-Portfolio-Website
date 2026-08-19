@@ -103,6 +103,8 @@ nav#navbar {
 .social-links { display: flex; gap: 1rem; justify-content: center; }
 .social-links a { width: 38px; height: 38px; border-radius: 50%; border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: var(--gray); transition: all 0.3s; font-size: 0.9rem; text-decoration: none; }
 .social-links a:hover { background: var(--primary); color: #fff; border-color: var(--primary); transform: translateY(-3px); }
+.social-links a.social-whatsapp:hover,
+.follow-links a[aria-label="WhatsApp"]:hover { background: #25d366 !important; border-color: #25d366 !important; color: #fff !important; transform: translateY(-3px); }
 .hero-image-wrapper { position: relative; display: flex; justify-content: center; align-items: center; align-self: center; flex-shrink: 0; width: 100%; margin-bottom: 1rem; }
 .hero-image-ring { position: relative; width: 250px; height: 250px; max-width: 100%; flex-shrink: 0; margin: 0 auto; }
 .hero-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; object-position: center top; border: 4px solid rgba(95, 188, 184, 0.3); box-shadow: 0 0 60px rgba(95, 188, 184, 0.2); }

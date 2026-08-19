@@ -260,6 +260,15 @@ def _seed_database() -> None:
     )
     import json
 
+    # Auto-migration: ensure newly added columns exist in sqlite table
+    try:
+        from sqlalchemy import text
+        with db.engine.connect() as conn:
+            conn.execute(text("ALTER TABLE site_settings ADD COLUMN whatsapp_number VARCHAR(50) DEFAULT '923477845540'"))
+            conn.commit()
+    except Exception:
+        pass
+
     # Settings
     if not SiteSettings.query.first():
         s = SiteSettings(
@@ -275,6 +284,7 @@ def _seed_database() -> None:
             contact_email="safiullah477845@gmail.com",
             github_url="https://github.com/SAFIULLAH012",
             linkedin_url="https://www.linkedin.com/in/safiullah012",
+            whatsapp_number="923477845540",
             site_title="Safi Ullah | Computer Science & Machine Learning Portfolio",
             meta_description=(
                 "Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, "

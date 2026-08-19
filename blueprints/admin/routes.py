@@ -662,6 +662,7 @@ def settings():
         s.availability = request.form.get("availability", "").strip()[:100]
         s.github_url = request.form.get("github_url", "").strip()[:300]
         s.linkedin_url = request.form.get("linkedin_url", "").strip()[:300]
+        s.whatsapp_number = request.form.get("whatsapp_number", "").strip()[:50]
         s.resume_url = request.form.get("resume_url", "").strip()[:300]
         s.site_title = request.form.get("site_title", "").strip()[:200]
         s.meta_description = request.form.get("meta_description", "").strip()[:300]

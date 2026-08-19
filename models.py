@@ -273,6 +273,7 @@ class SiteSettings(db.Model):
     # Social Links
     github_url = db.Column(db.String(300), default="")
     linkedin_url = db.Column(db.String(300), default="")
+    whatsapp_number = db.Column(db.String(50), default="923477845540")
     resume_url = db.Column(db.String(300), default="cv/safi_ullah_cv.pdf")
 
     # SEO

@@ -78,6 +78,9 @@
                         <a href="{{ settings.linkedin_url }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn Profile">
                             <i class="fab fa-linkedin-in" aria-hidden="true"></i>
                         </a>
+                        <a href="https://wa.me/{{ (settings.whatsapp_number or '923477845540') | replace('+', '') | replace(' ', '') | replace('-', '') }}?text=Hi%20Safi%20Ullah,%20I%20saw%20your%20portfolio" target="_blank" rel="noopener noreferrer" aria-label="Chat on WhatsApp" class="social-whatsapp">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i>
+                        </a>
                         <a href="mailto:{{ settings.contact_email }}" aria-label="Send email to {{ settings.name }}">
                             <i class="fas fa-envelope" aria-hidden="true"></i>
                         </a>
@@ -342,6 +345,16 @@
                     </div>
                     <div class="contact-card">
                         <div class="contact-card-header">
+                            <div class="contact-card-icon" aria-hidden="true" style="background: rgba(37, 211, 102, 0.15); color: #25d366;"><i class="fab fa-whatsapp"></i></div>
+                            <div><h3>WhatsApp</h3></div>
+                        </div>
+                        <p>+92 347 7845540<br>Instant Direct Chat</p>
+                        <a href="https://wa.me/{{ (settings.whatsapp_number or '923477845540') | replace('+', '') | replace(' ', '') | replace('-', '') }}?text=Hi%20Safi%20Ullah,%20I%20saw%20your%20portfolio" target="_blank" rel="noopener noreferrer" class="btn btn-primary" style="background: #25d366; border-color: #25d366; color: #fff;">
+                            <i class="fab fa-whatsapp" aria-hidden="true"></i> Chat on WhatsApp
+                        </a>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-card-header">
                             <div class="contact-card-icon" aria-hidden="true"><i class="fas fa-location-dot"></i></div>
                             <div><h3>Location</h3></div>
                         </div>
@@ -384,6 +397,7 @@
                 <div class="follow-links" aria-label="Social media links">
                     <a href="{{ settings.github_url }}" target="_blank" rel="noopener noreferrer" aria-label="GitHub"><i class="fab fa-github" aria-hidden="true"></i></a>
                     <a href="{{ settings.linkedin_url }}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn"><i class="fab fa-linkedin-in" aria-hidden="true"></i></a>
+                    <a href="https://wa.me/{{ (settings.whatsapp_number or '923477845540') | replace('+', '') | replace(' ', '') | replace('-', '') }}?text=Hi%20Safi%20Ullah,%20I%20saw%20your%20portfolio" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" style="color: #25d366;"><i class="fab fa-whatsapp" aria-hidden="true"></i></a>
                     <a href="mailto:{{ settings.contact_email }}" aria-label="Email"><i class="fas fa-envelope" aria-hidden="true"></i></a>
                 </div>
             </div>
