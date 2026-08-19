@@ -1,0 +1,143 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Experience{% endblock %}
+{% block page_title %}Work & Research Experience{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Experience</h2>
+    <button class="btn btn-primary" onclick="openExpModal()">
+        <i class="fas fa-plus"></i> Add Experience
+    </button>
+</div>
+
+<div class="section-card">
+    {% if experience %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Role</th>
+                <th>Company / Organization</th>
+                <th>Dates</th>
+                <th>Technologies</th>
+                <th>Order</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for exp in experience %}
+            <tr>
+                <td><strong>{{ exp.role }}</strong></td>
+                <td>{{ exp.company }}</td>
+                <td><span class="badge badge--gray">{{ exp.start_date }} - {{ exp.end_date }}</span></td>
+                <td>
+                    {% if exp.tech_list %}
+                    <div class="tag-list">
+                        {% for t in exp.tech_list %}
+                        <span class="tag-item">{{ t }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </td>
+                <td>{{ exp.display_order }}</td>
+                <td class="table-actions">
+                    <button class="action-icon action-icon--edit" title="Edit"
+                            onclick='editExp({{ exp.id }}, {{ exp.company | tojson }}, {{ exp.role | tojson }}, {{ (exp.start_date or "") | tojson }}, {{ (exp.end_date or "") | tojson }}, {{ (exp.description or "") | tojson }}, {{ ((exp.tech_list or []) | join(", ")) | tojson }}, {{ exp.display_order }})'>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-icon action-icon--delete" title="Delete"
+                            onclick="confirmDelete('{{ url_for('admin.experience_delete', eid=exp.id) }}', 'Delete experience: {{ exp.role }} at {{ exp.company }}?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-large">
+        <i class="fas fa-briefcase"></i>
+        <h3>No experience records yet</h3>
+        <button class="btn btn-primary" onclick="openExpModal()"><i class="fas fa-plus"></i> Add Experience</button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Experience Modal -->
+<div class="modal-overlay" id="expModal" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <h3 id="expModalTitle"><i class="fas fa-briefcase"></i> Add Experience</h3>
+        <form method="POST" action="{{ url_for('admin.experience_save') }}" id="expForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" id="exp_id">
+
+            <div class="form-group">
+                <label for="exp_role">Job Title / Role <span class="required">*</span></label>
+                <input type="text" id="exp_role" name="role" required class="form-control" placeholder="e.g. AI/ML Engineering Intern">
+            </div>
+
+            <div class="form-group">
+                <label for="exp_company">Company / Organization <span class="required">*</span></label>
+                <input type="text" id="exp_company" name="company" required class="form-control" placeholder="e.g. Tech Solutions">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="exp_start_date">Start Date</label>
+                    <input type="text" id="exp_start_date" name="start_date" class="form-control" placeholder="e.g. Jan 2024">
+                </div>
+                <div class="form-group">
+                    <label for="exp_end_date">End Date</label>
+                    <input type="text" id="exp_end_date" name="end_date" class="form-control" placeholder="e.g. Present">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="exp_display_order">Display Order</label>
+                    <input type="number" id="exp_display_order" name="display_order" value="0" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="exp_technologies">Technologies (comma-separated)</label>
+                    <input type="text" id="exp_technologies" name="technologies" class="form-control" placeholder="Python, TensorFlow, Flask">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="exp_description">Description / Key Responsibilities</label>
+                <textarea id="exp_description" name="description" rows="3" class="form-control" placeholder="Key contributions and achievements..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeExpModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Experience</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openExpModal() {
+    document.getElementById('expModalTitle').innerHTML = '<i class="fas fa-briefcase"></i> Add Experience';
+    document.getElementById('expForm').reset();
+    document.getElementById('exp_id').value = '';
+    document.getElementById('expModal').style.display = 'flex';
+}
+function closeExpModal() {
+    document.getElementById('expModal').style.display = 'none';
+}
+function editExp(id, company, role, start, end, desc, techs, order) {
+    document.getElementById('expModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Experience';
+    document.getElementById('exp_id').value = id;
+    document.getElementById('exp_company').value = company;
+    document.getElementById('exp_role').value = role;
+    document.getElementById('exp_start_date').value = start;
+    document.getElementById('exp_end_date').value = end;
+    document.getElementById('exp_description').value = desc;
+    document.getElementById('exp_technologies').value = techs;
+    document.getElementById('exp_display_order').value = order;
+    document.getElementById('expModal').style.display = 'flex';
+}
+</script>
+{% endblock %}

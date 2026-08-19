@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth" itemscope itemtype="https://schema.org/WebPage">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- ══ PRIMARY SEO META ══ -->
+    <title>{% block title %}Safi Ullah | AI & Machine Learning Engineer | Hire Computer Vision & Deep Learning Specialist{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Portfolio of Safi Ullah – AI & Machine Learning Engineer specializing in Computer Vision, Deep Learning, CNN, OpenCV & Flask. Available for Remote & On-site AI/ML roles.{% endblock %}">
+    <meta name="keywords" content="Safi Ullah, Safi Ullah portfolio, Safi Ullah machine learning, Safi Ullah computer science, Safi Ullah AI engineer, Safi Ullah computer vision, hire machine learning engineer, hire AI engineer, hire computer vision developer, machine learning portfolio, AI engineer portfolio, computer vision portfolio, deep learning portfolio, freelance machine learning engineer, AI developer Pakistan, Python ML developer for hire, remote AI engineer, SAFIULLAH012, safiullah ai">
+    <meta name="author" content="Safi Ullah">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="revisit-after" content="7 days">
+    <meta name="language" content="English">
+    <meta name="google-site-verification" content="XH9kibBHJIuVUUgmxhZvvb_EzSKrf5-E5PQmVh4Tvac">
+    <meta name="geo.region" content="PK">
+    <meta name="geo.placename" content="Pakistan">
+
+    <!-- ══ CANONICAL ══ -->
+    <link rel="canonical" href="{{ request.url }}">
+
+    <!-- ══ FAVICON ══ -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+
+    <!-- ══ OPEN GRAPH (Facebook / LinkedIn) ══ -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Safi Ullah Portfolio">
+    <meta property="og:locale" content="en_US">
+    <meta property="og:title" content="{% block og_title %}Safi Ullah | AI & Machine Learning Engineer | Portfolio & Hire{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Explore projects in Deep Learning, Computer Vision (MediaPipe, OpenCV), CNNs, and ML pipelines by Safi Ullah. Available for hire.{% endblock %}">
+    <meta property="og:url" content="{{ request.url }}">
+    <meta property="og:image" content="{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Safi Ullah - AI & Machine Learning Engineer">
+
+    <!-- ══ TWITTER CARD ══ -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:site" content="@SAFIULLAH012">
+    <meta name="twitter:creator" content="@SAFIULLAH012">
+    <meta name="twitter:title" content="Safi Ullah | AI & Machine Learning Engineer">
+    <meta name="twitter:description" content="AI & Machine Learning Engineer Portfolio — Computer Vision, Deep Learning, CNN, MediaPipe & Flask. Available for hire.">
+    <meta name="twitter:image" content="{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}">
+
+    <!-- ══ JSON-LD STRUCTURED DATA — Person & Professional Service Schema ══ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Safi Ullah",
+      "alternateName": [
+        "SafiUllah",
+        "safi ullah",
+        "SAFI ULLAH",
+        "Safiullah",
+        "safiullah",
+        "SAFIULLAH",
+        "Safi Ullah AI",
+        "safi ullah machine learning",
+        "safi ullah portfolio",
+        "SAFIULLAH012",
+        "safiullah012"
+      ],
+      "url": "{{ request.host_url }}",
+      "image": "{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}",
+      "jobTitle": "AI & Machine Learning Engineer",
+      "description": "Safi Ullah is an AI & Machine Learning Engineer from Pakistan specializing in Computer Vision, Deep Learning, CNN architectures, MediaPipe, OpenCV, predictive pipelines, and Flask web deployment. Open for remote and full-time hiring opportunities.",
+      "nationality": "Pakistani",
+      "hasOccupation": {
+        "@type": "Occupation",
+        "name": "Machine Learning Engineer",
+        "occupationLocation": {
+          "@type": "Country",
+          "name": "Pakistan"
+        },
+        "skills": "Machine Learning, Deep Learning, Computer Vision, MediaPipe, OpenCV, TensorFlow, Keras, CNN, Python, Flask, Streamlit, Scikit-Learn"
+      },
+      "knowsAbout": [
+        "Machine Learning",
+        "Deep Learning",
+        "Computer Vision",
+        "Convolutional Neural Networks",
+        "MediaPipe",
+        "Python",
+        "Flask",
+        "Streamlit",
+        "OpenCV",
+        "TensorFlow",
+        "Keras",
+        "Data Science",
+        "Predictive Modeling"
+      ],
+      "sameAs": [
+        "{{ settings.github_url if settings else 'https://github.com/SAFIULLAH012' }}",
+        "{{ settings.linkedin_url if settings else '' }}"
+      ],
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "PK",
+        "addressRegion": "Pakistan"
+      }
+    }
+    </script>
+
+    <!-- ══ JSON-LD — Website Schema ══ -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Safi Ullah Portfolio",
+      "url": "{{ request.host_url }}",
+      "description": "Portfolio website of Safi Ullah – AI & Machine Learning Engineer, Computer Vision specialist from Pakistan.",
+      "author": {
+        "@type": "Person",
+        "name": "Safi Ullah"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "{{ request.host_url }}#projects",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+
+    <!-- ══ FONTS & ICONS ══ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='3.0') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <a href="#main-content" class="skip-link sr-only" style="position: absolute; top: -100px; left: 1rem; z-index: 9999; padding: 0.5rem 1rem; background: var(--dark, #0f172a); color: var(--primary, #5fbcb8); border-radius: 4px; transition: top 0.2s;" onfocus="this.style.top='1rem'" onblur="this.style.top='-100px'">Skip to main content</a>
+
+    {% block body %}{% endblock %}
+
+    <script src="{{ url_for('static', filename='js/script.js', v='2.0') }}"></script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

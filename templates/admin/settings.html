@@ -1,0 +1,240 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Settings & Profile{% endblock %}
+{% block page_title %}Settings & Profile Configuration{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Site Settings &amp; Profile</h2>
+    <a href="{{ url_for('public.index') }}" target="_blank" class="btn btn-secondary">
+        <i class="fas fa-external-link-alt"></i> View Public Site
+    </a>
+</div>
+
+<form method="POST" action="{{ url_for('admin.settings') }}" enctype="multipart/form-data" class="admin-form">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="form-grid-2">
+        <!-- Left: Profile info -->
+        <div class="form-col">
+            <div class="form-section">
+                <h3 class="form-section-title">Personal Profile</h3>
+
+                <div class="form-group">
+                    <label for="name">Full Name <span class="required">*</span></label>
+                    <input type="text" id="name" name="name" value="{{ settings.name }}" required class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="headline">Headline / Role Title</label>
+                    <input type="text" id="headline" name="headline" value="{{ settings.headline }}" class="form-control" placeholder="AI & Machine Learning Engineer">
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">About Bio</label>
+                    <textarea id="bio" name="bio" rows="4" class="form-control">{{ settings.bio }}</textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="hero_description">Hero Description</label>
+                    <textarea id="hero_description" name="hero_description" rows="3" class="form-control">{{ settings.hero_description }}</textarea>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" name="location" value="{{ settings.location }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="availability">Availability Status</label>
+                        <input type="text" id="availability" name="availability" value="{{ settings.availability }}" class="form-control" placeholder="Open for Opportunities">
+                    </div>
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="about_domain">Domain Label</label>
+                        <input type="text" id="about_domain" name="about_domain" value="{{ settings.about_domain or 'AI / ML / Computer Vision' }}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label for="projects_badge_count">Projects Count Badge</label>
+                        <input type="text" id="projects_badge_count" name="projects_badge_count" value="{{ settings.projects_badge_count or '7+' }}" class="form-control" placeholder="7+">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="hero_tags">Hero Role Pills (comma-separated)</label>
+                    <input type="text" id="hero_tags" name="hero_tags" value="{{ settings.hero_tags_list | join(', ') if settings.hero_tags_list is defined else 'AI & Machine Learning Engineer, Computer Vision & MediaPipe, Deep Learning & CNN' }}" class="form-control">
+                    <small class="form-hint">E.g. AI & Machine Learning Engineer, Computer Vision & MediaPipe, Deep Learning & CNN</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="why_work_with_me">"Why Work With Me" Capability Bullets (one per line)</label>
+                    <textarea id="why_work_with_me" name="why_work_with_me" rows="4" class="form-control">{{ settings.why_work_with_me_list | join('\n') if settings.why_work_with_me_list is defined else '' }}</textarea>
+                    <small class="form-hint">Enter each bullet point on a new line.</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Profile Photo</h3>
+                {% if settings.profile_image %}
+                <div class="image-preview-wrapper">
+                    <img src="{{ url_for('static', filename=settings.profile_image) }}" alt="Profile photo" class="image-preview profile-thumb" id="profilePreview">
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="profile_image">Upload New Profile Photo</label>
+                    <input type="file" id="profile_image" name="profile_image" accept="image/png,image/jpeg,image/webp" class="form-control form-control--file" onchange="previewProfile(this)">
+                    <small class="form-hint">PNG, JPG, WebP — max 5MB</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right: Social links & SEO -->
+        <div class="form-col">
+            <div class="form-section">
+                <h3 class="form-section-title">Contact &amp; Social Links</h3>
+
+                <div class="form-group">
+                    <label for="contact_email">Contact Email <span class="required">*</span></label>
+                    <input type="email" id="contact_email" name="contact_email" value="{{ settings.contact_email }}" required class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="github_url">GitHub URL</label>
+                    <input type="url" id="github_url" name="github_url" value="{{ settings.github_url }}" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="github_handle">GitHub Handle (Display)</label>
+                    <input type="text" id="github_handle" name="github_handle" value="{{ settings.github_handle or '@SAFIULLAH012' }}" class="form-control" placeholder="@SAFIULLAH012">
+                </div>
+
+                <div class="form-group">
+                    <label for="linkedin_url">LinkedIn URL</label>
+                    <input type="url" id="linkedin_url" name="linkedin_url" value="{{ settings.linkedin_url }}" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="resume_pdf"><i class="fas fa-file-pdf" style="color: #ef4444;"></i> Upload New Resume / CV (PDF)</label>
+                    <input type="file" id="resume_pdf" name="resume_pdf" accept="application/pdf" class="form-control form-control--file">
+                    <small class="form-hint">Upload a PDF document (max 10MB). Automatically updates the download link on your homepage.</small>
+                </div>
+
+                <div class="form-group">
+                    <label for="resume_url">Or Custom Resume / CV Path / URL</label>
+                    <input type="text" id="resume_url" name="resume_url" value="{{ settings.resume_url or 'cv/safi_ullah_cv.pdf' }}" class="form-control" placeholder="cv/safi_ullah_cv.pdf">
+                    <small class="form-hint">Current active CV: <a href="{{ url_for('static', filename=settings.resume_url or 'cv/safi_ullah_cv.pdf') }}" target="_blank" style="color: var(--primary);">View Current PDF</a></small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">SEO &amp; Meta Settings</h3>
+
+                <div class="form-group">
+                    <label for="site_title">Site Title (Browser Tab)</label>
+                    <input type="text" id="site_title" name="site_title" value="{{ settings.site_title }}" class="form-control">
+                </div>
+
+                <div class="form-group">
+                    <label for="meta_description">Meta Description</label>
+                    <textarea id="meta_description" name="meta_description" rows="3" class="form-control">{{ settings.meta_description }}</textarea>
+                    <small class="form-hint">Shown in Google search snippets. Recommended 150–160 characters.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-actions">
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Settings
+        </button>
+    </div>
+</form>
+
+<!-- Security: Change Username & Password with Password Check + Email OTP -->
+<div class="section-card" id="security-credentials" style="margin-top: 2rem;">
+    <h3 class="card-title"><i class="fas fa-user-shield"></i> Security: Change Username &amp; Password</h3>
+    <p class="form-hint" style="margin-bottom: 1.5rem;">
+        For maximum security, changing your admin username or password requires <strong>confirming your existing password</strong> and <strong>verifying a 6-digit OTP code</strong> sent to your registered email (<strong>{{ session.get('admin_username') }}</strong>'s account).
+    </p>
+
+    <div class="form-grid-2">
+        <!-- Step 1: Confirm Current Password & Request OTP -->
+        <div class="form-section" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary);">
+                <span style="background: var(--primary); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 0.4rem;">1</span>
+                Step 1: Confirm Current Password
+            </h4>
+            <p class="form-hint" style="margin-bottom: 1rem;">Enter your current password to generate and send an OTP code to your registered email.</p>
+
+            <form method="POST" action="{{ url_for('admin.request_credential_otp') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="current_password">Current Password <span class="required">*</span></label>
+                    <input type="password" id="current_password" name="current_password" required class="form-control" placeholder="Enter your current password" autocomplete="current-password">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-paper-plane"></i> Verify &amp; Send OTP Code
+                </button>
+            </form>
+        </div>
+
+        <!-- Step 2: Enter OTP & New Credentials -->
+        <div class="form-section" style="background: #f8fafc; border: 1px solid #e2e8f0;">
+            <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-primary);">
+                <span style="background: var(--primary); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.75rem; margin-right: 0.4rem;">2</span>
+                Step 2: Enter OTP &amp; Update Credentials
+            </h4>
+            <p class="form-hint" style="margin-bottom: 1rem;">Enter the 6-digit OTP code received, along with any username or password changes.</p>
+
+            <form method="POST" action="{{ url_for('admin.update_credentials') }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="otp_code">6-Digit OTP Code <span class="required">*</span></label>
+                    <input type="text" id="otp_code" name="otp_code" required maxlength="6" class="form-control" placeholder="e.g. 583921" style="letter-spacing: 2px; font-weight: 700;">
+                </div>
+
+                <div class="form-group">
+                    <label for="new_username">New Username <small>(Optional — leave blank to keep current: <strong>{{ session.get('admin_username') }}</strong>)</small></label>
+                    <input type="text" id="new_username" name="new_username" class="form-control" placeholder="{{ session.get('admin_username') }}">
+                </div>
+
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="new_password">New Password <small>(Optional)</small></label>
+                        <input type="password" id="new_password" name="new_password" minlength="8" class="form-control" placeholder="Min 8 characters" autocomplete="new-password">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm_password">Confirm New Password</label>
+                        <input type="password" id="confirm_password" name="confirm_password" minlength="8" class="form-control" placeholder="Repeat new password" autocomplete="new-password">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">
+                    <i class="fas fa-check-circle"></i> Verify OTP &amp; Apply Changes
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function previewProfile(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let img = document.getElementById('profilePreview');
+            if (img) {
+                img.src = e.target.result;
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

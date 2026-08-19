@@ -1,0 +1,150 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Messages{% endblock %}
+{% block page_title %}Contact Messages{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Contact Messages</h2>
+    <div class="filter-tabs">
+        <a href="{{ url_for('admin.messages', show='inbox') }}" class="tab-btn {% if show != 'archived' %}tab-btn--active{% endif %}">
+            <i class="fas fa-inbox"></i> Inbox
+        </a>
+        <a href="{{ url_for('admin.messages', show='archived') }}" class="tab-btn {% if show == 'archived' %}tab-btn--active{% endif %}">
+            <i class="fas fa-archive"></i> Archived
+        </a>
+    </div>
+</div>
+
+<div class="section-card">
+    {% if messages %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Sender</th>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for m in messages %}
+            <tr class="{% if not m.is_read %}row--unread{% endif %}" id="msg-row-{{ m.id }}">
+                <td>
+                    <button class="status-dot {% if m.is_read %}status-dot--read{% else %}status-dot--unread{% endif %}"
+                            onclick="toggleRead({{ m.id }}, this)"
+                            title="{{ 'Mark as unread' if m.is_read else 'Mark as read' }}">
+                    </button>
+                </td>
+                <td>
+                    <strong>{{ m.name }}</strong>
+                    <span class="table-sub">{{ m.email }}</span>
+                </td>
+                <td>
+                    <a href="javascript:void(0)" onclick='viewMessage({{ m.id }}, {{ m.name | tojson }}, {{ m.email | tojson }}, {{ m.subject | tojson }}, {{ m.message | tojson }}, {{ m.created_at.strftime("%b %d, %Y %H:%M UTC") | tojson }})' class="msg-subject-link">
+                        {{ m.subject }}
+                    </a>
+                </td>
+                <td>{{ m.created_at.strftime('%b %d, %Y %H:%M') }}</td>
+                <td class="table-actions">
+                    <button class="action-icon" title="View Message"
+                            onclick='viewMessage({{ m.id }}, {{ m.name | tojson }}, {{ m.email | tojson }}, {{ m.subject | tojson }}, {{ m.message | tojson }}, {{ m.created_at.strftime("%b %d, %Y %H:%M UTC") | tojson }})'>
+                        <i class="fas fa-eye"></i>
+                    </button>
+                    <button class="action-icon" title="{{ 'Unarchive' if m.is_archived else 'Archive' }}"
+                            onclick="toggleArchive({{ m.id }}, this)">
+                        <i class="fas fa-{% if m.is_archived %}box-open{% else %}archive{% endif %}"></i>
+                    </button>
+                    <button class="action-icon action-icon--delete" title="Delete"
+                            onclick="confirmDelete('{{ url_for('admin.message_delete', mid=m.id) }}', 'Permanently delete message from {{ m.name }}?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-large">
+        <i class="fas fa-envelope-open"></i>
+        <h3>No {{ show }} messages</h3>
+        <p>Contact submissions from visitors will appear securely here.</p>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Message View Modal -->
+<div class="modal-overlay" id="msgModal" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box modal-box--wide">
+        <div class="msg-modal-header">
+            <h3 id="msgModalSubject">Subject</h3>
+            <button class="modal-close-btn" onclick="closeMsgModal()">&times;</button>
+        </div>
+        <div class="msg-modal-meta">
+            <div><strong>From:</strong> <span id="msgModalSender"></span> (<a href="#" id="msgModalReplyLink">reply</a>)</div>
+            <div><strong>Date:</strong> <span id="msgModalDate"></span></div>
+        </div>
+        <hr class="modal-hr">
+        <div class="msg-modal-body" id="msgModalBody"></div>
+        <div class="modal-actions">
+            <a href="#" id="msgModalEmailBtn" class="btn btn-primary"><i class="fas fa-reply"></i> Reply via Email</a>
+            <button type="button" class="btn btn-secondary" onclick="closeMsgModal()">Close</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+async function toggleRead(mid, dot) {
+    const res = await fetch(`/admin/messages/${mid}/read`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': document.querySelector('meta[name="csrf-token"]')?.content || ''}
+    });
+    if (res.ok) {
+        const data = await res.json();
+        if (dot) {
+            dot.className = `status-dot ${data.is_read ? 'status-dot--read' : 'status-dot--unread'}`;
+            dot.setAttribute('title', data.is_read ? 'Mark as unread' : 'Mark as read');
+        }
+        const row = document.getElementById(`msg-row-${mid}`);
+        if (row) {
+            if (data.is_read) {
+                row.classList.remove('row--unread');
+            } else {
+                row.classList.add('row--unread');
+            }
+        }
+    }
+}
+async function toggleArchive(mid, btn) {
+    const res = await fetch(`/admin/messages/${mid}/archive`, {
+        method: 'POST',
+        headers: {'X-CSRFToken': document.querySelector('meta[name="csrf-token"]')?.content || ''}
+    });
+    if (res.ok) {
+        window.location.reload();
+    }
+}
+async function viewMessage(id, name, email, subject, body, date) {
+    document.getElementById('msgModalSubject').textContent = subject;
+    document.getElementById('msgModalSender').textContent = name + ' <' + email + '>';
+    document.getElementById('msgModalDate').textContent = date;
+    document.getElementById('msgModalBody').textContent = body;
+    document.getElementById('msgModalReplyLink').href = 'mailto:' + email + '?subject=Re: ' + encodeURIComponent(subject);
+    document.getElementById('msgModalEmailBtn').href = 'mailto:' + email + '?subject=Re: ' + encodeURIComponent(subject);
+    document.getElementById('msgModal').style.display = 'flex';
+
+    // Auto mark as read if it is unread
+    const row = document.getElementById(`msg-row-${id}`);
+    if (row && row.classList.contains('row--unread')) {
+        const dot = row.querySelector('.status-dot');
+        await toggleRead(id, dot);
+    }
+}
+function closeMsgModal() {
+    document.getElementById('msgModal').style.display = 'none';
+}
+</script>
+<meta name="csrf-token" content="{{ csrf_token() }}">
+{% endblock %}

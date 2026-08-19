@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verify Email — Portfolio CMS</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body class="login-body">
+    <div class="login-wrapper">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="login-logo"><i class="fas fa-envelope-open-text"></i></div>
+                <h1>Verify Email</h1>
+                <p>We've sent a 6-digit code to <strong>{{ email }}</strong></p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="flash flash--{{ category }}" role="alert">
+                    <i class="fas fa-exclamation-circle"></i> {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('admin.register_verify') }}" class="login-form">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <div class="form-group">
+                    <label for="otp"><i class="fas fa-key"></i> Verification Code (OTP)</label>
+                    <input type="text" id="otp" name="otp" placeholder="Enter 6-digit code" 
+                           pattern="[0-9]{6}" maxlength="6" required autofocus class="form-control"
+                           style="letter-spacing: 0.25rem; font-size: 1.25rem; text-align: center;">
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-block">
+                    <i class="fas fa-check-circle"></i> Verify & Create Account
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <a href="{{ url_for('admin.register') }}">← Back to Register</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

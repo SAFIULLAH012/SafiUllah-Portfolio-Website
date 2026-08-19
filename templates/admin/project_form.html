@@ -1,0 +1,236 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{{ 'Edit' if action == 'edit' else 'New' }} Project{% endblock %}
+{% block page_title %}{{ 'Edit Project' if action == 'edit' else 'Add New Project' }}{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>{{ 'Edit Project' if action == 'edit' else 'Add New Project' }}</h2>
+    <a href="{{ url_for('admin.projects_list') }}" class="btn btn-secondary">← Back to Projects</a>
+</div>
+
+<form method="POST" enctype="multipart/form-data" class="admin-form" id="projectForm"
+      action="{{ url_for('admin.project_edit', pid=project.id) if action == 'edit' else url_for('admin.project_new') }}"
+      novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="form-grid-2">
+        <!-- Left Column -->
+        <div class="form-col">
+
+            <div class="form-section">
+                <h3 class="form-section-title">Basic Information</h3>
+                <div class="form-group">
+                    <label for="title">Project Title <span class="required">*</span></label>
+                    <input type="text" id="title" name="title" value="{{ project.title if project else '' }}"
+                           required maxlength="200" class="form-control" oninput="generateSlug(this.value)">
+                </div>
+                <div class="form-group">
+                    <label for="slug">URL Slug <span class="required">*</span></label>
+                    <div class="input-prefix-wrapper">
+                        <span class="input-prefix">/projects/</span>
+                        <input type="text" id="slug" name="slug" value="{{ project.slug if project else '' }}"
+                               required maxlength="200" class="form-control" placeholder="auto-generated-from-title">
+                    </div>
+                    <small class="form-hint">URL-safe slug. Auto-generated from title, or customize manually.</small>
+                </div>
+                <div class="form-group">
+                    <label for="category">Category</label>
+                    <input type="text" id="category" name="category" value="{{ project.category if project else 'Machine Learning' }}"
+                           maxlength="100" class="form-control" list="category-options">
+                    <datalist id="category-options">
+                        <option value="Machine Learning">
+                        <option value="Deep Learning / Computer Vision">
+                        <option value="Computer Vision">
+                        <option value="Machine Learning / Regression">
+                        <option value="Machine Learning / Healthcare">
+                        <option value="Natural Language Processing">
+                        <option value="Data Science">
+                        <option value="Web / Deployment">
+                    </datalist>
+                </div>
+                <div class="form-group">
+                    <label for="short_description">Short Description <span class="required">*</span></label>
+                    <textarea id="short_description" name="short_description" rows="2" maxlength="400"
+                              class="form-control" required>{{ project.short_description if project else '' }}</textarea>
+                    <small class="form-hint">Shown on the public project card. Max 400 characters.</small>
+                </div>
+                <div class="form-group">
+                    <label for="description">Full Description</label>
+                    <textarea id="description" name="description" rows="4" class="form-control">{{ project.description if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="problem_statement">Problem Statement</label>
+                    <textarea id="problem_statement" name="problem_statement" rows="3" class="form-control">{{ project.problem_statement if project else '' }}</textarea>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">ML / Technical Details</h3>
+                <div class="form-group">
+                    <label for="dataset">Dataset</label>
+                    <textarea id="dataset" name="dataset" rows="2" class="form-control">{{ project.dataset if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="preprocessing">Preprocessing</label>
+                    <textarea id="preprocessing" name="preprocessing" rows="2" class="form-control">{{ project.preprocessing if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="model_architecture">Model Architecture</label>
+                    <textarea id="model_architecture" name="model_architecture" rows="3" class="form-control">{{ project.model_architecture if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="results">Results</label>
+                    <textarea id="results" name="results" rows="2" class="form-control">{{ project.results if project else '' }}</textarea>
+                </div>
+                <div class="form-group">
+                    <label for="limitations">Limitations &amp; Disclaimers</label>
+                    <textarea id="limitations" name="limitations" rows="2" class="form-control">{{ project.limitations if project else '' }}</textarea>
+                    <small class="form-hint">Important for medical/safety projects. Be honest about limitations.</small>
+                </div>
+                <div class="form-group">
+                    <label for="future_improvements">Future Improvements</label>
+                    <textarea id="future_improvements" name="future_improvements" rows="2" class="form-control">{{ project.future_improvements if project else '' }}</textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="form-col">
+
+            <div class="form-section">
+                <h3 class="form-section-title">Performance Metrics</h3>
+                {% set m = project.metrics_dict if project else {} %}
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="metric_accuracy">Accuracy</label>
+                        <input type="text" id="metric_accuracy" name="metric_accuracy" value="{{ m.get('accuracy', '') }}" class="form-control" placeholder="e.g. 95.2%">
+                    </div>
+                    <div class="form-group">
+                        <label for="metric_precision">Precision</label>
+                        <input type="text" id="metric_precision" name="metric_precision" value="{{ m.get('precision', '') }}" class="form-control" placeholder="e.g. 94.8%">
+                    </div>
+                    <div class="form-group">
+                        <label for="metric_recall">Recall (Sensitivity)</label>
+                        <input type="text" id="metric_recall" name="metric_recall" value="{{ m.get('recall', '') }}" class="form-control" placeholder="e.g. 95.7%">
+                    </div>
+                    <div class="form-group">
+                        <label for="metric_f1">F1 Score</label>
+                        <input type="text" id="metric_f1" name="metric_f1" value="{{ m.get('f1', '') }}" class="form-control" placeholder="e.g. 95.2%">
+                    </div>
+                    <div class="form-group">
+                        <label for="metric_roc_auc">ROC-AUC</label>
+                        <input type="text" id="metric_roc_auc" name="metric_roc_auc" value="{{ m.get('roc_auc', '') }}" class="form-control" placeholder="e.g. 0.98">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Links</h3>
+                <div class="form-group">
+                    <label for="github_url">GitHub URL</label>
+                    <input type="url" id="github_url" name="github_url" value="{{ project.github_url if project else '' }}" class="form-control" placeholder="https://github.com/...">
+                </div>
+                <div class="form-group">
+                    <label for="demo_url">Live Demo URL</label>
+                    <input type="url" id="demo_url" name="demo_url" value="{{ project.demo_url if project else '' }}" class="form-control" placeholder="https://...">
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Technologies</h3>
+                <div class="form-group">
+                    <label for="technologies">Technologies (comma-separated)</label>
+                    <input type="text" id="technologies" name="technologies"
+                           value="{{ (project.tech_list | join(', ')) if project else '' }}"
+                           class="form-control" placeholder="TensorFlow, Keras, OpenCV, Flask">
+                    <small class="form-hint">E.g. TensorFlow, Keras, OpenCV, Flask</small>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Display &amp; Status</h3>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label for="display_order">Display Order</label>
+                        <input type="number" id="display_order" name="display_order"
+                               value="{{ project.display_order if project else 0 }}" min="0" class="form-control">
+                    </div>
+                </div>
+                <div class="toggle-row">
+                    <label class="toggle-label">
+                        <input type="checkbox" name="published" id="published" class="toggle-checkbox"
+                               {% if project and project.published %}checked{% endif %}>
+                        <span class="toggle-switch"></span>
+                        <span>Published (visible on public site)</span>
+                    </label>
+                </div>
+                <div class="toggle-row">
+                    <label class="toggle-label">
+                        <input type="checkbox" name="featured" id="featured" class="toggle-checkbox"
+                               {% if project and project.featured %}checked{% endif %}>
+                        <span class="toggle-switch"></span>
+                        <span>Featured (highlighted on homepage)</span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-section">
+                <h3 class="form-section-title">Project Image</h3>
+                {% if project and project.image %}
+                <div class="image-preview-wrapper" id="currentImageWrapper">
+                    <img src="{{ url_for('static', filename=project.image) }}" alt="Current image" class="image-preview" id="imagePreview">
+                    <p class="form-hint">Current image. Upload a new one to replace.</p>
+                </div>
+                {% else %}
+                <div class="image-preview-wrapper" id="currentImageWrapper" style="display:none;">
+                    <img src="" alt="Preview" class="image-preview" id="imagePreview">
+                </div>
+                {% endif %}
+                <div class="form-group">
+                    <label for="image">Upload Image</label>
+                    <input type="file" id="image" name="image" accept="image/png,image/jpeg,image/webp"
+                           class="form-control form-control--file" onchange="previewImage(this)">
+                    <small class="form-hint">PNG, JPG, WebP — max 5MB</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+        <a href="{{ url_for('admin.projects_list') }}" class="btn btn-secondary">Cancel</a>
+        <button type="submit" name="action" value="draft" class="btn btn-secondary" onclick="document.getElementById('published').checked=false;">
+            <i class="fas fa-save"></i> Save as Draft
+        </button>
+        <button type="submit" class="btn btn-primary">
+            <i class="fas fa-check"></i> {{ 'Update Project' if action == 'edit' else 'Create Project' }}
+        </button>
+    </div>
+</form>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function generateSlug(title) {
+    const slugField = document.getElementById('slug');
+    if (!slugField.dataset.manualEdit) {
+        slugField.value = title.toLowerCase().replace(/[^\w\s-]/g, '').replace(/[\s_]+/g, '-').replace(/^-+|-+$/g, '');
+    }
+}
+document.getElementById('slug').addEventListener('input', function() {
+    this.dataset.manualEdit = 'true';
+});
+function previewImage(input) {
+    if (input.files && input.files[0]) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('imagePreview');
+            const wrapper = document.getElementById('currentImageWrapper');
+            preview.src = e.target.result;
+            wrapper.style.display = 'block';
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
+</script>
+{% endblock %}

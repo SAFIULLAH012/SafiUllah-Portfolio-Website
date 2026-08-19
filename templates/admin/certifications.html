@@ -1,0 +1,133 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Certifications{% endblock %}
+{% block page_title %}Certifications & Credentials{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Certifications</h2>
+    <button class="btn btn-primary" onclick="openCertModal()">
+        <i class="fas fa-plus"></i> Add Certification
+    </button>
+</div>
+
+<div class="section-card">
+    {% if certifications %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Issuer</th>
+                <th>Date</th>
+                <th>Credential Link</th>
+                <th>Order</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for c in certifications %}
+            <tr>
+                <td><strong>{{ c.title }}</strong></td>
+                <td>{{ c.issuer }}</td>
+                <td>{{ c.issue_date or '—' }}</td>
+                <td>
+                    {% if c.credential_url %}
+                    <a href="{{ c.credential_url }}" target="_blank" class="table-link">
+                        <i class="fas fa-external-link-alt"></i> View
+                    </a>
+                    {% else %}—{% endif %}
+                </td>
+                <td>{{ c.display_order }}</td>
+                <td class="table-actions">
+                    <button class="action-icon action-icon--edit" title="Edit"
+                            onclick='editCert({{ c.id }}, {{ c.title | tojson }}, {{ c.issuer | tojson }}, {{ (c.issue_date or "") | tojson }}, {{ (c.credential_url or "") | tojson }}, {{ c.display_order }})'>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-icon action-icon--delete" title="Delete"
+                            onclick="confirmDelete('{{ url_for('admin.certification_delete', cid=c.id) }}', 'Delete certification: {{ c.title }}?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-large">
+        <i class="fas fa-certificate"></i>
+        <h3>No certifications yet</h3>
+        <button class="btn btn-primary" onclick="openCertModal()"><i class="fas fa-plus"></i> Add Certification</button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Cert Modal -->
+<div class="modal-overlay" id="certModal" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <h3 id="certModalTitle"><i class="fas fa-certificate"></i> Add Certification</h3>
+        <form method="POST" action="{{ url_for('admin.certification_save') }}" id="certForm" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" id="cert_id">
+
+            <div class="form-group">
+                <label for="cert_title">Certification Title <span class="required">*</span></label>
+                <input type="text" id="cert_title" name="title" required class="form-control" placeholder="e.g. Deep Learning Specialization">
+            </div>
+
+            <div class="form-group">
+                <label for="cert_issuer">Issuing Organization <span class="required">*</span></label>
+                <input type="text" id="cert_issuer" name="issuer" required class="form-control" placeholder="e.g. Coursera / DeepLearning.AI">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="cert_issue_date">Issue Date</label>
+                    <input type="text" id="cert_issue_date" name="issue_date" class="form-control" placeholder="e.g. May 2024">
+                </div>
+                <div class="form-group">
+                    <label for="cert_display_order">Display Order</label>
+                    <input type="number" id="cert_display_order" name="display_order" value="0" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="cert_credential_url">Credential URL</label>
+                <input type="url" id="cert_credential_url" name="credential_url" class="form-control" placeholder="https://coursera.org/verify/...">
+            </div>
+
+            <div class="form-group">
+                <label for="cert_image">Certificate Image / Badge</label>
+                <input type="file" id="cert_image" name="image" accept="image/png,image/jpeg,image/gif,image/webp" class="form-control form-control--file">
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeCertModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Certification</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openCertModal() {
+    document.getElementById('certModalTitle').innerHTML = '<i class="fas fa-certificate"></i> Add Certification';
+    document.getElementById('certForm').reset();
+    document.getElementById('cert_id').value = '';
+    document.getElementById('certModal').style.display = 'flex';
+}
+function closeCertModal() {
+    document.getElementById('certModal').style.display = 'none';
+}
+function editCert(id, title, issuer, issue_date, url, order) {
+    document.getElementById('certModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Certification';
+    document.getElementById('cert_id').value = id;
+    document.getElementById('cert_title').value = title;
+    document.getElementById('cert_issuer').value = issuer;
+    document.getElementById('cert_issue_date').value = issue_date;
+    document.getElementById('cert_credential_url').value = url;
+    document.getElementById('cert_display_order').value = order;
+    document.getElementById('certModal').style.display = 'flex';
+}
+</script>
+{% endblock %}

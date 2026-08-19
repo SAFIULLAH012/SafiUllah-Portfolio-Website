@@ -1,0 +1,118 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Welcome back, {{ session.get('admin_username', 'Admin') }}! 👋</h2>
+    <p class="page-subtitle">Here's an overview of your portfolio CMS.</p>
+</div>
+
+<!-- Stats Grid -->
+<div class="stats-grid">
+    <a href="{{ url_for('admin.projects_list') }}" class="stat-card stat-card--blue">
+        <div class="stat-icon"><i class="fas fa-folder"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.total_projects }}</div>
+            <div class="stat-label">Total Projects</div>
+        </div>
+    </a>
+    <a href="{{ url_for('admin.projects_list') }}" class="stat-card stat-card--green">
+        <div class="stat-icon"><i class="fas fa-globe"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.published_projects }}</div>
+            <div class="stat-label">Published</div>
+        </div>
+    </a>
+    <a href="{{ url_for('admin.projects_list') }}" class="stat-card stat-card--orange">
+        <div class="stat-icon"><i class="fas fa-pencil-alt"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.draft_projects }}</div>
+            <div class="stat-label">Drafts</div>
+        </div>
+    </a>
+    <a href="{{ url_for('admin.messages') }}" class="stat-card stat-card--red">
+        <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.unread_messages }}</div>
+            <div class="stat-label">Unread Messages</div>
+        </div>
+    </a>
+    <a href="{{ url_for('admin.skills') }}" class="stat-card stat-card--purple">
+        <div class="stat-icon"><i class="fas fa-code"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.total_skills }}</div>
+            <div class="stat-label">Skills</div>
+        </div>
+    </a>
+    <a href="{{ url_for('admin.certifications') }}" class="stat-card stat-card--teal">
+        <div class="stat-icon"><i class="fas fa-certificate"></i></div>
+        <div class="stat-info">
+            <div class="stat-value">{{ stats.total_certifications }}</div>
+            <div class="stat-label">Certifications</div>
+        </div>
+    </a>
+</div>
+
+<!-- Quick Actions -->
+<div class="section-card">
+    <h3 class="card-title">Quick Actions</h3>
+    <div class="quick-actions">
+        <a href="{{ url_for('admin.project_new') }}" class="action-btn action-btn--primary">
+            <i class="fas fa-plus"></i> New Project
+        </a>
+        <a href="{{ url_for('admin.messages') }}" class="action-btn action-btn--secondary">
+            <i class="fas fa-envelope"></i> View Messages
+        </a>
+        <a href="{{ url_for('admin.settings') }}" class="action-btn action-btn--secondary">
+            <i class="fas fa-cog"></i> Edit Profile
+        </a>
+        <a href="{{ url_for('public.index') }}" target="_blank" class="action-btn action-btn--ghost">
+            <i class="fas fa-external-link-alt"></i> View Site
+        </a>
+    </div>
+</div>
+
+<!-- Recent Messages -->
+<div class="section-card">
+    <div class="card-header-row">
+        <h3 class="card-title">Recent Messages</h3>
+        <a href="{{ url_for('admin.messages') }}" class="btn-link">View All →</a>
+    </div>
+    {% if recent_messages %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>From</th>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for msg in recent_messages %}
+            <tr class="{% if not msg.is_read %}row--unread{% endif %}">
+                <td>
+                    <div class="msg-sender">
+                        <strong>{{ msg.name }}</strong>
+                        <span class="msg-email">{{ msg.email }}</span>
+                    </div>
+                </td>
+                <td>{{ msg.subject }}</td>
+                <td>{{ msg.created_at.strftime('%b %d, %Y') }}</td>
+                <td>
+                    {% if msg.is_read %}
+                    <span class="badge badge--gray">Read</span>
+                    {% else %}
+                    <span class="badge badge--blue">Unread</span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <p class="empty-state"><i class="fas fa-inbox"></i> No messages yet.</p>
+    {% endif %}
+</div>
+{% endblock %}

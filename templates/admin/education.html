@@ -1,0 +1,139 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Education{% endblock %}
+{% block page_title %}Education & Academic History{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Education Records</h2>
+    <button class="btn btn-primary" onclick="openEduModal()">
+        <i class="fas fa-plus"></i> Add Education
+    </button>
+</div>
+
+<div class="section-card">
+    {% if education %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Level</th>
+                <th>Degree / Program</th>
+                <th>Institution</th>
+                <th>Score</th>
+                <th>Order</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for e in education %}
+            <tr>
+                <td><span class="badge badge--blue">{{ e.level }}</span></td>
+                <td><strong>{{ e.degree }}</strong></td>
+                <td>{{ e.institution }}</td>
+                <td>
+                    {% if e.score %}
+                    <span class="badge badge--green">{{ e.score_label }}: {{ e.score }}</span>
+                    {% else %}—{% endif %}
+                </td>
+                <td>{{ e.display_order }}</td>
+                <td class="table-actions">
+                    <button class="action-icon action-icon--edit" title="Edit"
+                            onclick='editEdu({{ e.id }}, {{ e.institution | tojson }}, {{ e.degree | tojson }}, {{ e.level | tojson }}, {{ (e.start_year or "") | tojson }}, {{ (e.end_year or "") | tojson }}, {{ (e.score or "") | tojson }}, {{ (e.score_label or "Score") | tojson }}, {{ (e.description or "") | tojson }}, {{ e.display_order }})'>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-icon action-icon--delete" title="Delete"
+                            onclick="confirmDelete('{{ url_for('admin.education_delete', eid=e.id) }}', 'Delete education record: {{ e.degree }}?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-large">
+        <i class="fas fa-graduation-cap"></i>
+        <h3>No education records yet</h3>
+        <button class="btn btn-primary" onclick="openEduModal()"><i class="fas fa-plus"></i> Add Education</button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Education Modal -->
+<div class="modal-overlay" id="eduModal" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <h3 id="eduModalTitle"><i class="fas fa-graduation-cap"></i> Add Education</h3>
+        <form method="POST" action="{{ url_for('admin.education_save') }}" id="eduForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" id="edu_id">
+
+            <div class="form-group">
+                <label for="edu_degree">Degree / Certificate <span class="required">*</span></label>
+                <input type="text" id="edu_degree" name="degree" required class="form-control" placeholder="e.g. BSc Computer Science">
+            </div>
+
+            <div class="form-group">
+                <label for="edu_institution">Institution / Board <span class="required">*</span></label>
+                <input type="text" id="edu_institution" name="institution" required class="form-control" placeholder="e.g. University of Layyah">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="edu_level">Level / Tag</label>
+                    <input type="text" id="edu_level" name="level" class="form-control" placeholder="e.g. BSc Computer Science, ICS">
+                </div>
+                <div class="form-group">
+                    <label for="edu_display_order">Display Order</label>
+                    <input type="number" id="edu_display_order" name="display_order" value="0" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="edu_score">Score / Grade</label>
+                    <input type="text" id="edu_score" name="score" class="form-control" placeholder="e.g. 3.94/4.0, 990/1100">
+                </div>
+                <div class="form-group">
+                    <label for="edu_score_label">Score Label</label>
+                    <input type="text" id="edu_score_label" name="score_label" value="Score" class="form-control" placeholder="CGPA, Score, Grade">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="edu_description">Description / Notes</label>
+                <textarea id="edu_description" name="description" rows="3" class="form-control" placeholder="Highlights, subjects, accomplishments..."></textarea>
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeEduModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Education</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openEduModal() {
+    document.getElementById('eduModalTitle').innerHTML = '<i class="fas fa-graduation-cap"></i> Add Education';
+    document.getElementById('eduForm').reset();
+    document.getElementById('edu_id').value = '';
+    document.getElementById('eduModal').style.display = 'flex';
+}
+function closeEduModal() {
+    document.getElementById('eduModal').style.display = 'none';
+}
+function editEdu(id, inst, degree, level, start, end, score, label, desc, order) {
+    document.getElementById('eduModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Education';
+    document.getElementById('edu_id').value = id;
+    document.getElementById('edu_institution').value = inst;
+    document.getElementById('edu_degree').value = degree;
+    document.getElementById('edu_level').value = level;
+    document.getElementById('edu_score').value = score;
+    document.getElementById('edu_score_label').value = label;
+    document.getElementById('edu_description').value = desc;
+    document.getElementById('edu_display_order').value = order;
+    document.getElementById('eduModal').style.display = 'flex';
+}
+</script>
+{% endblock %}

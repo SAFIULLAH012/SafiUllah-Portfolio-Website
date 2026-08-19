@@ -1,0 +1,143 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Skills{% endblock %}
+{% block page_title %}Technical Skills{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <h2>Technical Skills</h2>
+    <button class="btn btn-primary" onclick="openSkillModal()">
+        <i class="fas fa-plus"></i> Add Skill
+    </button>
+</div>
+
+<div class="section-card">
+    {% if skills %}
+    <table class="admin-table">
+        <thead>
+            <tr>
+                <th>Icon</th>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Proficiency</th>
+                <th>Tags</th>
+                <th>Order</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in skills %}
+            <tr>
+                <td><i class="{{ s.icon_class }} table-icon"></i></td>
+                <td><strong>{{ s.name }}</strong></td>
+                <td><span class="badge badge--gray">{{ s.category }}</span></td>
+                <td>
+                    <div class="admin-progress">
+                        <div class="admin-progress-bar" style="width: {{ s.proficiency }}%"></div>
+                    </div>
+                    <small>{{ s.proficiency }}%</small>
+                </td>
+                <td>
+                    {% if s.tags_list %}
+                    <div class="tag-list">
+                        {% for tag in s.tags_list %}
+                        <span class="tag-item">{{ tag }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </td>
+                <td>{{ s.display_order }}</td>
+                <td class="table-actions">
+                    <button class="action-icon action-icon--edit" title="Edit"
+                            onclick='editSkill({{ s.id }}, {{ s.name | tojson }}, {{ s.category | tojson }}, {{ s.icon_class | tojson }}, {{ s.proficiency }}, {{ (s.tags_list | join(", ")) | tojson }}, {{ s.display_order }})'>
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-icon action-icon--delete" title="Delete"
+                            onclick="confirmDelete('{{ url_for('admin.skill_delete', sid=s.id) }}', 'Delete skill: {{ s.name }}?')">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="empty-state-large">
+        <i class="fas fa-code"></i>
+        <h3>No skills added yet</h3>
+        <button class="btn btn-primary" onclick="openSkillModal()"><i class="fas fa-plus"></i> Add Skill</button>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Skill Modal -->
+<div class="modal-overlay" id="skillModal" style="display:none;" role="dialog" aria-modal="true">
+    <div class="modal-box">
+        <h3 id="skillModalTitle"><i class="fas fa-code"></i> Add Skill</h3>
+        <form method="POST" action="{{ url_for('admin.skill_save') }}" id="skillForm">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <input type="hidden" name="id" id="skill_id">
+
+            <div class="form-group">
+                <label for="skill_name">Skill Name <span class="required">*</span></label>
+                <input type="text" id="skill_name" name="name" required class="form-control" placeholder="e.g. Computer Vision">
+            </div>
+
+            <div class="form-group">
+                <label for="skill_category">Category</label>
+                <input type="text" id="skill_category" name="category" class="form-control" placeholder="e.g. Machine Learning, Deep Learning">
+            </div>
+
+            <div class="form-group">
+                <label for="skill_icon_class">Font Awesome Icon Class</label>
+                <input type="text" id="skill_icon_class" name="icon_class" value="fas fa-code" class="form-control" placeholder="e.g. fas fa-eye, fab fa-python">
+            </div>
+
+            <div class="form-row-2">
+                <div class="form-group">
+                    <label for="skill_proficiency">Proficiency (0-100%)</label>
+                    <input type="number" id="skill_proficiency" name="proficiency" min="0" max="100" value="80" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="skill_display_order">Display Order</label>
+                    <input type="number" id="skill_display_order" name="display_order" value="0" class="form-control">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="skill_tags">Sub-skills / Tags (comma-separated)</label>
+                <input type="text" id="skill_tags" name="tags" class="form-control" placeholder="OpenCV, MediaPipe, ALPR">
+            </div>
+
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="closeSkillModal()">Cancel</button>
+                <button type="submit" class="btn btn-primary">Save Skill</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function openSkillModal() {
+    document.getElementById('skillModalTitle').innerHTML = '<i class="fas fa-code"></i> Add Skill';
+    document.getElementById('skillForm').reset();
+    document.getElementById('skill_id').value = '';
+    document.getElementById('skillModal').style.display = 'flex';
+}
+function closeSkillModal() {
+    document.getElementById('skillModal').style.display = 'none';
+}
+function editSkill(id, name, category, icon_class, proficiency, tags, display_order) {
+    document.getElementById('skillModalTitle').innerHTML = '<i class="fas fa-edit"></i> Edit Skill';
+    document.getElementById('skill_id').value = id;
+    document.getElementById('skill_name').value = name;
+    document.getElementById('skill_category').value = category;
+    document.getElementById('skill_icon_class').value = icon_class;
+    document.getElementById('skill_proficiency').value = proficiency;
+    document.getElementById('skill_tags').value = tags;
+    document.getElementById('skill_display_order').value = display_order;
+    document.getElementById('skillModal').style.display = 'flex';
+}
+</script>
+{% endblock %}
