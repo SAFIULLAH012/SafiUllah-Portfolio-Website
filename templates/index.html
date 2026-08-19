@@ -42,6 +42,14 @@
         <canvas class="particles" id="particles1" aria-hidden="true"></canvas>
         <div class="container">
             <div class="hero-grid">
+                <div class="hero-image-wrapper reveal" aria-hidden="true">
+                    <div class="hero-image-ring">
+                        <div class="rotating-border"></div>
+                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" class="hero-img" loading="eager" width="350" height="350">
+                        <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
+                        <div class="badge badge-loc"><div class="badge-dot"></div><div>{{ settings.location }}</div></div>
+                    </div>
+                </div>
                 <div class="hero-content reveal">
                     <div class="hero-subtitle"><span aria-hidden="true">👋</span> Hi, I'm</div>
                     <h1 class="hero-name" itemprop="name">{{ settings.name }}</h1>
@@ -73,14 +81,6 @@
                         <a href="mailto:{{ settings.contact_email }}" aria-label="Send email to {{ settings.name }}">
                             <i class="fas fa-envelope" aria-hidden="true"></i>
                         </a>
-                    </div>
-                </div>
-                <div class="hero-image-wrapper reveal" aria-hidden="true">
-                    <div class="hero-image-ring">
-                        <div class="rotating-border"></div>
-                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" class="hero-img" loading="eager" width="350" height="350">
-                        <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
-                        <div class="badge badge-loc"><div class="badge-dot"></div><div>{{ settings.location }}</div></div>
                     </div>
                 </div>
             </div>
