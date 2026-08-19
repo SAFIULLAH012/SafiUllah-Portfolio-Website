@@ -36,11 +36,11 @@
                     </div>
                     <small>
                         {{ s.proficiency }}% — 
-                        {% if s.proficiency >= 85 %}
+                        {% if s.proficiency >= 90 %}
                             <strong style="color: var(--primary);">Advanced</strong>
-                        {% elif s.proficiency >= 70 %}
+                        {% elif s.proficiency >= 80 %}
                             <strong style="color: #38bdf8;">Intermediate to Advanced</strong>
-                        {% elif s.proficiency >= 50 %}
+                        {% elif s.proficiency >= 68 %}
                             <strong style="color: #fbbf24;">Intermediate</strong>
                         {% else %}
                             <strong style="color: #94a3b8;">Beginner to Intermediate</strong>
@@ -133,9 +133,9 @@
 <script>
 function getLevelText(val) {
     val = parseInt(val) || 0;
-    if (val >= 85) return 'Advanced';
-    if (val >= 70) return 'Intermediate to Advanced';
-    if (val >= 50) return 'Intermediate';
+    if (val >= 90) return 'Advanced';
+    if (val >= 80) return 'Intermediate to Advanced';
+    if (val >= 68) return 'Intermediate';
     return 'Beginner to Intermediate';
 }
 function updateSkillLevelPreview(val) {

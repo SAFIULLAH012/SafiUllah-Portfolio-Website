@@ -303,27 +303,40 @@ def _seed_database() -> None:
     # Skills
     if not Skill.query.first():
         skills_data = [
-            {"name": "Computer Vision", "category": "Computer Vision", "proficiency": 85,
-             "icon_class": "fas fa-eye",
-             "tags": json.dumps(["OpenCV", "MediaPipe", "ALPR", "Face Mesh"]), "display_order": 1},
+            {"name": "Python", "category": "Programming", "proficiency": 95,
+             "icon_class": "fab fa-python",
+             "tags": json.dumps(["Python 3", "OOP", "Data Structures"]), "display_order": 1},
             {"name": "Machine Learning", "category": "Machine Learning", "proficiency": 82,
              "icon_class": "fas fa-chart-line",
-             "tags": json.dumps(["Scikit-Learn", "NumPy", "Pandas", "Seaborn"]), "display_order": 2},
-            {"name": "Deep Learning & CNNs", "category": "Deep Learning", "proficiency": 80,
+             "tags": json.dumps(["Scikit-Learn", "NumPy", "Pandas", "Pipelines"]), "display_order": 2},
+            {"name": "Computer Vision", "category": "Computer Vision", "proficiency": 75,
+             "icon_class": "fas fa-eye",
+             "tags": json.dumps(["OpenCV", "MediaPipe", "ALPR", "Face Mesh"]), "display_order": 3},
+            {"name": "Deep Learning & CNNs", "category": "Deep Learning", "proficiency": 75,
              "icon_class": "fas fa-brain",
-             "tags": json.dumps(["TensorFlow", "Keras", "CNN", "MobileNetV2"]), "display_order": 3},
-            {"name": "Flask & APIs", "category": "Web & Deployment", "proficiency": 78,
-             "icon_class": "fas fa-server",
-             "tags": json.dumps(["Flask", "REST API", "Streamlit", "Docker"]), "display_order": 4},
-            {"name": "Python", "category": "Programming", "proficiency": 90,
-             "icon_class": "fab fa-python",
-             "tags": json.dumps(["Python 3", "OOP", "Data Structures"]), "display_order": 5},
-            {"name": "Data Analysis", "category": "Data Science", "proficiency": 80,
+             "tags": json.dumps(["TensorFlow", "Keras", "CNN", "MobileNetV2"]), "display_order": 4},
+            {"name": "Data Analysis", "category": "Data Science", "proficiency": 75,
              "icon_class": "fas fa-database",
-             "tags": json.dumps(["Pandas", "Matplotlib", "Seaborn", "EDA"]), "display_order": 6},
+             "tags": json.dumps(["Pandas", "Matplotlib", "Seaborn", "EDA"]), "display_order": 5},
+            {"name": "Flask & APIs", "category": "Web & Deployment", "proficiency": 60,
+             "icon_class": "fas fa-server",
+             "tags": json.dumps(["Flask", "REST API", "Streamlit", "Docker"]), "display_order": 6},
         ]
         for sd in skills_data:
             db.session.add(Skill(**sd))
+    else:
+        # Sync skill proficiencies for accurate default levels
+        for s in Skill.query.all():
+            nl = s.name.lower()
+            if "python" in nl and s.proficiency < 90:
+                s.proficiency = 95
+            elif ("machine learning" in nl or nl == "ml") and (s.proficiency < 80 or s.proficiency >= 90):
+                s.proficiency = 82
+            elif ("flask" in nl or "api" in nl) and s.proficiency > 65:
+                s.proficiency = 60
+            elif ("deep" in nl or "vision" in nl or "analysis" in nl) and s.proficiency > 79:
+                s.proficiency = 75
+        db.session.commit()
 
     # Education
     from models import Education
