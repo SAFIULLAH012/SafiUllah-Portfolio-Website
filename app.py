@@ -13,7 +13,8 @@ from config import config_map
 from extensions import db, csrf, mail, limiter
 from utils.security import apply_security_headers
 
-load_dotenv()
+_base_dir = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(_base_dir, ".env"))
 
 
 def create_app(env: str | None = None) -> Flask:

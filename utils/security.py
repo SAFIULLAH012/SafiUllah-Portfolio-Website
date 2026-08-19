@@ -173,7 +173,7 @@ def send_otp_email(to_email: str, otp_code: str, purpose_text: str) -> bool:
         f"If you did not initiate this request, please review your account security immediately.\n\n"
         f"— Portfolio CMS Security System"
     )
-    resend_api_key = current_app.config.get("RESEND_API_KEY")
+    resend_api_key = (current_app.config.get("RESEND_API_KEY") or os.environ.get("RESEND_API_KEY", "")).strip()
     sent = False
 
     if resend_api_key:

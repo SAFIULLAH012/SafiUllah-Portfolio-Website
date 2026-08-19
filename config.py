@@ -4,6 +4,11 @@ Uses environment variables exclusively for sensitive values.
 """
 import os
 from datetime import timedelta
+from dotenv import load_dotenv
+
+# Ensure .env is loaded even if WSGI is launched from an arbitrary working directory
+_base_dir = os.path.dirname(os.path.abspath(__file__))
+load_dotenv(os.path.join(_base_dir, ".env"))
 
 
 class Config:

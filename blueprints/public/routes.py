@@ -3,6 +3,7 @@ Public portfolio routes — homepage, project detail, contact, SEO endpoints.
 """
 import json
 import logging
+import os
 import re
 from datetime import datetime, timezone
 from flask import (
@@ -153,7 +154,7 @@ def contact():
 
     # ── Email notification ─────────────────────────────────────────────────────
     recipient = current_app.config.get("CONTACT_RECIPIENT_EMAIL", "safiullah477845@gmail.com")
-    resend_api_key = current_app.config.get("RESEND_API_KEY")
+    resend_api_key = (current_app.config.get("RESEND_API_KEY") or os.environ.get("RESEND_API_KEY", "")).strip()
 
     email_sent = False
     if resend_api_key and recipient:
