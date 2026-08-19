@@ -86,7 +86,7 @@ nav#navbar {
 .text-center { text-align: center; }
 
 /* Hero */
-.hero { min-height: calc(100vh - 75px); display: flex; align-items: center; justify-content: center; background: var(--dark); padding: 4rem 0 2.5rem; box-sizing: border-box; }
+.hero { min-height: calc(100vh - 75px); display: flex; align-items: center; justify-content: center; background: var(--dark); padding: 6.5rem 0 3.5rem; box-sizing: border-box; }
 .hero-grid { display: grid; grid-template-columns: 1fr 360px; gap: 3rem; align-items: center; justify-content: space-between; width: 100%; }
 .hero-content { min-width: 0; width: 100%; max-width: 650px; text-align: left; }
 .hero-subtitle { color: var(--primary); font-weight: 600; margin-top: 0.5rem; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.5rem; font-size: 1.1rem; }
@@ -458,16 +458,22 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
 }
 
 /* Responsive */
-@media (max-width: 992px) {
-    .hero { min-height: auto; padding: 4rem 0 2.5rem; text-align: center; }
-    .hero-grid { grid-template-columns: 1fr; gap: 2rem; }
-    .hero-image-wrapper { order: -1; width: 100%; justify-content: center; margin-bottom: 1rem; }
-    .hero-content { order: 1; text-align: center; max-width: 100%; }
-    .hero-buttons, .social-links, .hero-tags { justify-content: center; align-items: center; }
+@media (max-width: 1024px) {
+    .hero { min-height: auto; padding: 6.5rem 0 3rem; text-align: center; }
+    .hero-grid { grid-template-columns: 1fr; gap: 2rem; justify-items: center; }
+    .hero-image-wrapper { order: -1; width: 100%; display: flex; justify-content: center; margin-top: 1rem; margin-bottom: 1.5rem; }
+    .hero-content { order: 1; text-align: center; max-width: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+    .hero-subtitle { justify-content: center; text-align: center; width: 100%; }
+    .hero-name { text-align: center; width: 100%; font-size: 2.8rem; }
+    .hero-role-wrapper { justify-content: center; text-align: center; width: 100%; }
+    .hero-tags { align-items: center; justify-content: center; width: 100%; }
+    .hero-tag { justify-content: center; }
+    .hero-desc { text-align: center; margin: 0 auto 1.5rem; }
+    .hero-buttons { justify-content: center; }
+    .social-links { justify-content: center; }
     .about-grid, .contact-grid, .detail-header-grid, .detail-layout { grid-template-columns: 1fr; }
     .skills-grid, .projects-grid { grid-template-columns: repeat(2, 1fr); }
     .hero-image-ring { width: 300px; height: 300px; margin: 0 auto; }
-    .hero-name { font-size: 2.8rem; }
     .about-img-wrapper { order: -1; max-width: 400px; margin: 0 auto; }
     .timeline-card { flex-direction: column; text-align: left; align-items: flex-start; gap: 1rem; }
     .timeline-score { text-align: left; }
@@ -475,15 +481,18 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
 @media (max-width: 768px) {
     .nav-links { display: none; }
     .hamburger { display: block; }
-    .hero { padding: 3rem 0 2rem; min-height: auto; text-align: center; }
-    .hero-grid { grid-template-columns: 1fr; gap: 1.5rem; }
-    .hero-image-wrapper { order: -1; justify-content: center; }
-    .hero-content { order: 1; }
+    .hero { padding: 5.5rem 0 2.5rem; min-height: auto; text-align: center; }
+    .hero-grid { grid-template-columns: 1fr; gap: 1.5rem; justify-items: center; }
+    .hero-image-wrapper { order: -1; justify-content: center; margin-top: 0.5rem; margin-bottom: 1.2rem; }
+    .hero-content { order: 1; display: flex; flex-direction: column; align-items: center; text-align: center; }
+    .hero-subtitle { justify-content: center; width: 100%; }
+    .hero-role-wrapper { justify-content: center; font-size: 1.4rem; height: 2.2rem; min-height: 2.2rem; width: 100%; }
+    .hero-name { font-size: 2.2rem; white-space: normal; text-align: center; }
+    .hero-tags { align-items: center; width: 100%; }
+    .hero-tag { justify-content: center; }
     .hero-buttons { justify-content: center; }
     .social-links { justify-content: center; }
-    .hero-desc { margin: 0 auto 1.5rem; }
-    .hero-role-wrapper { justify-content: center; font-size: 1.4rem; height: 2.2rem; min-height: 2.2rem; }
-    .hero-name { font-size: 2.2rem; white-space: normal; }
+    .hero-desc { margin: 0 auto 1.5rem; text-align: center; }
     .form-row { grid-template-columns: 1fr; }
     .section-title { font-size: 2rem; }
     .skills-grid, .projects-grid { grid-template-columns: 1fr; }
