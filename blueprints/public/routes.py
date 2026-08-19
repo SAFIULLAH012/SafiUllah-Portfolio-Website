@@ -152,9 +152,49 @@ def contact():
         return jsonify({"success": False, "message": "An error occurred. Please try again later."}), 500
 
     # ── Email notification ─────────────────────────────────────────────────────
-    recipient = current_app.config.get("CONTACT_RECIPIENT_EMAIL")
+    recipient = current_app.config.get("CONTACT_RECIPIENT_EMAIL", "safiullah477845@gmail.com")
+    resend_api_key = current_app.config.get("RESEND_API_KEY")
 
-    if recipient:
+    email_sent = False
+    if resend_api_key and recipient:
+        try:
+            import requests
+            headers = {
+                "Authorization": f"Bearer {resend_api_key}",
+                "Content-Type": "application/json",
+            }
+            html_content = (
+                f"<div style='font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;'>"
+                f"<h2 style='color: #0f172a; border-bottom: 2px solid #5fbcb8; padding-bottom: 10px;'>🚀 New Portfolio Message</h2>"
+                f"<p style='margin: 8px 0;'><strong>From:</strong> {name} (&lt;<a href='mailto:{email}'>{email}</a>&gt;)</p>"
+                f"<p style='margin: 8px 0;'><strong>Subject:</strong> {subject}</p>"
+                f"<p style='margin: 8px 0;'><strong>Date:</strong> {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}</p>"
+                f"<hr style='border: none; border-top: 1px solid #e2e8f0; margin: 20px 0;'>"
+                f"<div style='background: #f8fafc; padding: 15px; border-radius: 6px; border-left: 4px solid #5fbcb8;'>"
+                f"<p style='margin: 0; white-space: pre-wrap; color: #334155; font-size: 15px; line-height: 1.6;'>{body}</p>"
+                f"</div>"
+                f"<p style='color: #64748b; font-size: 12px; margin-top: 20px;'>"
+                f"Tip: Simply click 'Reply' in your email app to respond directly to {name} ({email})."
+                f"</p></div>"
+            )
+            payload = {
+                "from": "Safi Ullah Portfolio <onboarding@resend.dev>",
+                "to": [recipient],
+                "reply_to": email,
+                "subject": f"🚀 New Portfolio Message from {name}: {subject}",
+                "html": html_content,
+                "text": f"New Portfolio Message\n\nFrom: {name} ({email})\nSubject: {subject}\n\nMessage:\n{body}",
+            }
+            r = requests.post("https://api.resend.com/emails", json=payload, headers=headers, timeout=10)
+            if r.status_code in (200, 201):
+                email_sent = True
+                logger.info("Resend email dispatched successfully to %s from %s", recipient, email)
+            else:
+                logger.warning("Resend returned status %s: %s", r.status_code, r.text)
+        except Exception:
+            logger.exception("Resend API dispatch failed")
+
+    if not email_sent and recipient:
         try:
             from flask_mail import Message as MailMessage
             m = MailMessage(
@@ -171,18 +211,6 @@ def contact():
                     f"{body}\n\n"
                     f"---\n"
                     f"Tip: Simply click 'Reply' in your email client to respond directly to {name} ({email})."
-                ),
-                html=(
-                    f"<html><body>"
-                    f"<p>You have received a new message from your portfolio website!</p>"
-                    f"<p><strong>Sender Name:</strong> {name}<br/>"
-                    f"<strong>Sender Email:</strong> {email}<br/>"
-                    f"<strong>Subject:</strong> {subject}<br/>"
-                    f"<strong>Date:</strong> {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}</p>"
-                    f"<p><strong>Message:</strong><br/>{body.replace('\\n', '<br/>')}</p>"
-                    f"<img src='" + url_for('static', filename='images/hero.jpg', _external=True) + "' alt='Portfolio Hero' style='max-width:600px; width:100%; height:auto;'/>"
-                    f"<p>---<br/>Tip: Simply click 'Reply' in your email client to respond directly to {name} ({email}).</p>"
-                    f"</body></html>"
                 ),
             )
             mail.send(m)

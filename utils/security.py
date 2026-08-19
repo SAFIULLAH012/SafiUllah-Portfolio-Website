@@ -161,10 +161,9 @@ def apply_security_headers(response):
 
 def send_otp_email(to_email: str, otp_code: str, purpose_text: str) -> bool:
     """
-    Send OTP verification code to registered admin email via Flask-Mail if configured.
+    Send OTP verification code to registered admin email via Resend API or Flask-Mail.
     Always logs the action for audit purposes.
     """
-    from extensions import mail
     subject = f"Portfolio CMS Security Verification Code: {otp_code}"
     body = (
         f"Hello,\n\n"
@@ -174,17 +173,51 @@ def send_otp_email(to_email: str, otp_code: str, purpose_text: str) -> bool:
         f"If you did not initiate this request, please review your account security immediately.\n\n"
         f"— Portfolio CMS Security System"
     )
+    resend_api_key = current_app.config.get("RESEND_API_KEY")
     sent = False
-    if current_app.config.get("MAIL_USERNAME") and current_app.config.get("MAIL_PASSWORD"):
+
+    if resend_api_key:
         try:
+            import requests
+            headers = {
+                "Authorization": f"Bearer {resend_api_key}",
+                "Content-Type": "application/json",
+            }
+            html_body = (
+                f"<div style='font-family: Arial, sans-serif; max-width: 500px; padding: 20px; border: 1px solid #e2e8f0; border-radius: 8px;'>"
+                f"<h2 style='color: #0f172a;'>🔐 Security Verification Code</h2>"
+                f"<p>Hello,</p>"
+                f"<p>Your OTP verification code for <strong>{purpose_text}</strong> is:</p>"
+                f"<div style='background: #f1f5f9; padding: 12px 20px; font-size: 24px; font-weight: bold; letter-spacing: 4px; color: #5fbcb8; border-radius: 6px; text-align: center; margin: 15px 0;'>"
+                f"{otp_code}"
+                f"</div>"
+                f"<p style='color: #64748b; font-size: 13px;'>This code will expire in 10 minutes. If you did not initiate this request, please check your account security immediately.</p>"
+                f"</div>"
+            )
+            payload = {
+                "from": "Safi Ullah Portfolio <onboarding@resend.dev>",
+                "to": [to_email],
+                "subject": subject,
+                "html": html_body,
+                "text": body,
+            }
+            r = requests.post("https://api.resend.com/emails", json=payload, headers=headers, timeout=10)
+            if r.status_code in (200, 201):
+                sent = True
+                logger.info("OTP email successfully sent via Resend to %s", to_email)
+        except Exception:
+            logger.exception("Failed to dispatch OTP email via Resend")
+
+    if not sent and current_app.config.get("MAIL_USERNAME") and current_app.config.get("MAIL_PASSWORD"):
+        try:
+            from extensions import mail
             from flask_mail import Message as MailMessage
             msg = MailMessage(subject=subject, recipients=[to_email], body=body)
             mail.send(msg)
             sent = True
-            logger.info("OTP email successfully sent to %s", to_email)
+            logger.info("OTP email successfully sent to %s via SMTP", to_email)
         except Exception as e:
             logger.exception("Failed to dispatch OTP email via SMTP: %s", e)
-    else:
-        logger.info("SMTP credentials not configured. OTP for %s is: %s", to_email, otp_code)
+
     return sent
 

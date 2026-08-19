@@ -27,16 +27,17 @@ class Config:
     }
 
     # ── Email ─────────────────────────────────────────────────────────────────
+    RESEND_API_KEY = os.environ.get("RESEND_API_KEY", "").strip()
     MAIL_SERVER = os.environ.get("MAIL_SERVER", "smtp.gmail.com")
     MAIL_PORT = int(os.environ.get("MAIL_PORT", 587))
     MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "True").lower() in ("true", "1", "on")
     MAIL_USERNAME = os.environ.get("MAIL_USERNAME", "").strip()
     MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD", "").replace(" ", "").strip()
     MAIL_DEFAULT_SENDER = os.environ.get(
-        "MAIL_DEFAULT_SENDER", os.environ.get("MAIL_USERNAME", "")
+        "MAIL_DEFAULT_SENDER", os.environ.get("MAIL_USERNAME", "onboarding@resend.dev")
     ).strip()
     CONTACT_RECIPIENT_EMAIL = os.environ.get(
-        "CONTACT_RECIPIENT_EMAIL", os.environ.get("MAIL_USERNAME", "")
+        "CONTACT_RECIPIENT_EMAIL", "safiullah477845@gmail.com"
     )
     ALLOWED_ADMIN_EMAILS = [
         email.strip() for email in os.environ.get(
