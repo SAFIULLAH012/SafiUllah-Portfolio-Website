@@ -271,7 +271,8 @@ def _seed_database() -> None:
         pass
 
     # Settings
-    if not SiteSettings.query.first():
+    settings_obj = SiteSettings.query.first()
+    if not settings_obj:
         s = SiteSettings(
             name="Safi Ullah",
             headline="Computer Science Student & ML Learner",
@@ -286,10 +287,10 @@ def _seed_database() -> None:
             github_url="https://github.com/SAFIULLAH012",
             linkedin_url="https://www.linkedin.com/in/safiullah012",
             whatsapp_number="923477845540",
-            site_title="Safi Ullah | Computer Science & Machine Learning Portfolio",
+            site_title="Safi Ullah | AI & Machine Learning Engineer Portfolio",
             meta_description=(
                 "Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, "
-                "Computer Science student at University of Layyah."
+                "AI & Machine Learning Engineer from Pakistan."
             ),
             hero_description=(
                 "Computer Science student passionate about Machine Learning and Computer Vision. "
@@ -309,6 +310,12 @@ def _seed_database() -> None:
             profile_image="img/safiullah_profile.jpeg",
         )
         db.session.add(s)
+    else:
+        if settings_obj.site_title == "Safi Ullah | Computer Science & Machine Learning Portfolio":
+            settings_obj.site_title = "Safi Ullah | AI & Machine Learning Engineer Portfolio"
+        if not settings_obj.meta_description:
+            settings_obj.meta_description = "Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, AI & Machine Learning Engineer from Pakistan."
+        db.session.commit()
 
     # Skills
     if not Skill.query.first():
