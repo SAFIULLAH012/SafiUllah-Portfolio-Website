@@ -81,7 +81,7 @@
                 <div class="hero-image-wrapper reveal" aria-hidden="true">
                     <div class="hero-image-ring">
                         <div class="rotating-border"></div>
-                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" class="hero-img" loading="eager" width="330" height="330">
+                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safi-ullah.jpg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" title="Safi Ullah" class="hero-img" loading="eager" width="330" height="330">
                         <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
                         <div class="badge badge-loc"><div class="badge-dot"></div><div>{{ settings.location }}</div></div>
                     </div>
@@ -99,7 +99,7 @@
             </div>
             <div class="about-grid">
                 <div class="about-img-wrapper reveal">
-                    <img src="{{ url_for('static', filename=settings.profile_image or 'img/safiullah_profile.jpeg') }}" alt="Safi Ullah – AI & Machine Learning Engineer, Computer Vision, Deep Learning Expert, Pakistan" class="about-img" loading="lazy" width="450" height="420">
+                    <img src="{{ url_for('static', filename=settings.profile_image or 'img/safi-ullah.jpg') }}" alt="Safi Ullah – AI & Machine Learning Engineer, Computer Vision, Deep Learning Expert, Pakistan" title="Safi Ullah" class="about-img" loading="lazy" width="450" height="420">
                     <div class="about-img-badge" aria-label="{{ settings.projects_badge_count or '7+' }} Projects Built">
                         <span class="num">{{ settings.projects_badge_count or '7+' }}</span><span class="txt">Projects<br>Built</span>
                     </div>

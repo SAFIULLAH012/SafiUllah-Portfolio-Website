@@ -63,7 +63,12 @@
         "safiullah012"
       ],
       "url": "{{ request.host_url }}",
-      "image": "{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}",
+      "image": {
+        "@type": "ImageObject",
+        "url": "{{ url_for('static', filename=settings.profile_image if settings else 'img/safi-ullah.jpg', _external=True) }}",
+        "name": "Safi Ullah",
+        "caption": "Safi Ullah - AI & Machine Learning Engineer from Pakistan"
+      },
       "jobTitle": "Computer Science Student & Machine Learning Enthusiast",
       "description": "Safi Ullah is a Computer Science student at the University of Layyah, Pakistan, specializing in Computer Vision, Machine Learning, Deep Learning (CNNs), MediaPipe, OpenCV, and Python development.",
       "nationality": "Pakistani",
