@@ -20,8 +20,10 @@
     <!-- ══ CANONICAL ══ -->
     <link rel="canonical" href="{{ request.base_url }}">
 
-    <!-- ══ FAVICON ══ -->
+    <!-- ══ FAVICON & PWA ══ -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/favicon.svg') }}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{{ url_for('static', filename='img/apple-touch-icon.png') }}">
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}">
 
     <!-- ══ OPEN GRAPH (Facebook / LinkedIn) ══ -->
     <meta property="og:type" content="website">
@@ -30,7 +32,7 @@
     <meta property="og:title" content="{% block og_title %}Safi Ullah | Computer Science & Machine Learning Portfolio{% endblock %}">
     <meta property="og:description" content="{% block og_description %}Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, Computer Science student at University of Layyah.{% endblock %}">
     <meta property="og:url" content="{{ request.base_url }}">
-    <meta property="og:image" content="{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}">
+    <meta property="og:image" content="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp', _external=True) }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
     <meta property="og:image:alt" content="Safi Ullah - Computer Science & Machine Learning Portfolio">
@@ -41,7 +43,7 @@
     <meta name="twitter:creator" content="@SAFIULLAH012">
     <meta name="twitter:title" content="Safi Ullah | Computer Science & Machine Learning Portfolio">
     <meta name="twitter:description" content="Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, Computer Science student at University of Layyah.">
-    <meta name="twitter:image" content="{{ url_for('static', filename=settings.profile_image if settings else 'img/safiullah_profile.jpeg', _external=True) }}">
+    <meta name="twitter:image" content="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp', _external=True) }}">
 
     <!-- ══ JSON-LD STRUCTURED DATA — Person & Professional Service Schema ══ -->
     <script type="application/ld+json">
@@ -65,7 +67,7 @@
       "url": "{{ request.host_url }}",
       "image": {
         "@type": "ImageObject",
-        "url": "{{ url_for('static', filename=settings.profile_image if settings else 'img/safi-ullah.jpg', _external=True) }}",
+        "url": "{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp', _external=True) }}",
         "name": "Safi Ullah",
         "caption": "Safi Ullah - AI & Machine Learning Engineer from Pakistan"
       },
@@ -102,6 +104,7 @@
       ],
       "address": {
         "@type": "PostalAddress",
+        "addressLocality": "Layyah",
         "addressCountry": "PK",
         "addressRegion": "Pakistan"
       }
@@ -192,16 +195,19 @@
             loadGA();
         } else if(consent === null){
             banner.style.display = 'block';
+            document.body.classList.add('cookie-visible');
         }
 
         acceptBtn.addEventListener('click', function(){
             localStorage.setItem('safi_cookie_consent', 'accepted');
             banner.style.display = 'none';
+            document.body.classList.remove('cookie-visible');
             loadGA();
         });
         declineBtn.addEventListener('click', function(){
             localStorage.setItem('safi_cookie_consent', 'declined');
             banner.style.display = 'none';
+            document.body.classList.remove('cookie-visible');
         });
     })();
     </script>

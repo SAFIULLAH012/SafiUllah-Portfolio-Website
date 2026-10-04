@@ -1,0 +1,16 @@
+{
+  "name": "Safi Ullah Portfolio",
+  "short_name": "SafiUllah",
+  "description": "Safi Ullah - AI & Machine Learning Engineer Portfolio",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0f172a",
+  "theme_color": "#0f172a",
+  "icons": [
+    {
+      "src": "/static/img/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ]
+}

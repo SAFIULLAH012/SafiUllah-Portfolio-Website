@@ -81,9 +81,9 @@
                 <div class="hero-image-wrapper reveal" aria-hidden="true">
                     <div class="hero-image-ring">
                         <div class="rotating-border"></div>
-                        <img src="{{ url_for('static', filename=settings.profile_image or 'img/safi-ullah.jpg') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" title="Safi Ullah" class="hero-img" loading="eager" width="330" height="330">
+                        <img src="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" title="Safi Ullah" class="hero-img" loading="eager" width="330" height="330">
                         <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
-                        <div class="badge badge-loc"><div class="badge-dot"></div><div>{{ settings.location }}</div></div>
+                        <div class="badge badge-loc"><div class="badge-dot" style="background: #22c55e;"></div><div>Available for Hire</div></div>
                     </div>
                 </div>
             </div>
@@ -99,12 +99,15 @@
             </div>
             <div class="about-grid">
                 <div class="about-img-wrapper reveal">
-                    <img src="{{ url_for('static', filename=settings.profile_image or 'img/safi-ullah.jpg') }}" alt="Safi Ullah – AI & Machine Learning Engineer, Computer Vision, Deep Learning Expert, Pakistan" title="Safi Ullah" class="about-img" loading="lazy" width="450" height="420">
+                    <img src="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp') }}" alt="Safi Ullah – AI & Machine Learning Engineer, Computer Vision, Deep Learning Expert, Pakistan" title="Safi Ullah" class="about-img" loading="lazy" width="450" height="420">
                     <div class="about-img-badge" aria-label="{{ settings.projects_badge_count or '7+' }} Projects Built">
                         <span class="num">{{ settings.projects_badge_count or '7+' }}</span><span class="txt">Projects<br>Built</span>
                     </div>
                 </div>
                 <div class="reveal">
+                    <div class="about-bio-passage" style="margin-bottom: 1.5rem; font-size: 1.1rem; line-height: 1.7; color: var(--text-muted);">
+                        Safi Ullah is an AI and Machine Learning Engineer from Layyah, Punjab, Pakistan. With a strong academic background in Computer Science, Safi Ullah specializes in custom Deep Learning architectures, real-time Computer Vision pipelines, and deploying predictive analytics using Python, TensorFlow, and OpenCV.
+                    </div>
                     <div class="about-card">
                         <dl class="about-card-grid">
                             <div class="about-card-item"><dt>Name</dt><dd>{{ settings.name }}</dd></div>
@@ -311,6 +314,100 @@
         </div>
     </section>
     {% endif %}
+
+    {% endif %}
+
+    <!-- Testimonials Section -->
+    <section class="section-dark" id="testimonials" aria-label="Testimonials">
+        <div class="container">
+            <div class="text-center">
+                <div class="pill" aria-hidden="true">Recommendations</div>
+                <h2 class="section-title">What People Say</h2>
+            </div>
+            <div class="testimonials-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                <article class="testimonial-card reveal" style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+                    <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-quote-left"></i></div>
+                    <p style="font-style: italic; margin-bottom: 1.5rem; color: #cbd5e1;">"Safi Ullah delivered an exceptionally accurate Brain Tumor classification CNN model. His understanding of deep learning and attention to detail in image preprocessing was impressive."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--dark);">U</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">University Faculty</h4>
+                            <span style="font-size: 0.85rem; color: #94a3b8;">Computer Science Dept.</span>
+                        </div>
+                    </div>
+                </article>
+                <article class="testimonial-card reveal" style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1); animation-delay: 0.2s;">
+                    <div style="color: var(--primary); font-size: 1.5rem; margin-bottom: 1rem;"><i class="fas fa-quote-left"></i></div>
+                    <p style="font-style: italic; margin-bottom: 1.5rem; color: #cbd5e1;">"A highly motivated developer. The custom real-time computer vision pipeline he built using OpenCV and MediaPipe worked flawlessly in our testing environment."</p>
+                    <div style="display: flex; align-items: center; gap: 1rem;">
+                        <div style="width: 50px; height: 50px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--dark);">C</div>
+                        <div>
+                            <h4 style="margin: 0; font-size: 1rem;">Client / Collaborator</h4>
+                            <span style="font-size: 0.85rem; color: #94a3b8;">Upwork Client</span>
+                        </div>
+                    </div>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="section-light" id="faq" aria-label="Frequently Asked Questions">
+        <div class="container">
+            <div class="text-center">
+                <div class="pill" aria-hidden="true">FAQs</div>
+                <h2 class="section-title">Frequently Asked <span class="highlight">Questions</span></h2>
+            </div>
+            <div class="faq-accordion" style="max-width: 800px; margin: 3rem auto 0; display: flex; flex-direction: column; gap: 1rem;">
+                <details class="reveal" style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer;">
+                    <summary style="font-weight: 600; font-size: 1.1rem; color: var(--dark); outline: none;">Who is Safi Ullah?</summary>
+                    <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">Safi Ullah is an AI and Machine Learning Engineer from Layyah, Punjab, Pakistan. He specializes in building robust deep learning models, computer vision systems, and deploying them via web applications using Flask and Streamlit.</p>
+                </details>
+                <details class="reveal" style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer;">
+                    <summary style="font-weight: 600; font-size: 1.1rem; color: var(--dark); outline: none;">What services does Safi Ullah offer?</summary>
+                    <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">Safi Ullah offers custom Machine Learning model development, real-time Computer Vision pipelines, Deep Learning (CNN) architectures, and predictive analytics. He also handles end-to-end API deployment.</p>
+                </details>
+                <details class="reveal" style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer;">
+                    <summary style="font-weight: 600; font-size: 1.1rem; color: var(--dark); outline: none;">What programming languages and frameworks do you use?</summary>
+                    <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">Python is my primary programming language. I heavily utilize frameworks and libraries like TensorFlow, Keras, OpenCV, MediaPipe, Scikit-Learn for AI, and Flask/Streamlit for web deployment.</p>
+                </details>
+                <details class="reveal" style="background: white; padding: 1.5rem; border-radius: 8px; border: 1px solid var(--border); box-shadow: var(--shadow-sm); cursor: pointer;">
+                    <summary style="font-weight: 600; font-size: 1.1rem; color: var(--dark); outline: none;">How can I hire or collaborate with Safi Ullah?</summary>
+                    <p style="margin-top: 1rem; color: var(--text-muted); line-height: 1.6;">You can reach out directly via the contact form on this website, send an email to safiullah477845@gmail.com, or message me directly on WhatsApp. I typically respond within 24 hours.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ JSON-LD Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      "mainEntity": [{
+        "@type": "Question",
+        "name": "Who is Safi Ullah?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Safi Ullah is an AI and Machine Learning Engineer from Layyah, Punjab, Pakistan. He specializes in building robust deep learning models, computer vision systems, and deploying them via web applications using Flask and Streamlit."
+        }
+      },{
+        "@type": "Question",
+        "name": "What services does Safi Ullah offer?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Safi Ullah offers custom Machine Learning model development, real-time Computer Vision pipelines, Deep Learning (CNN) architectures, and predictive analytics. He also handles end-to-end API deployment."
+        }
+      },{
+        "@type": "Question",
+        "name": "What programming languages and frameworks do you use?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Python is my primary programming language. I heavily utilize frameworks and libraries like TensorFlow, Keras, OpenCV, MediaPipe, Scikit-Learn for AI, and Flask/Streamlit for web deployment."
+        }
+      }]
+    }
+    </script>
 
     <!-- Contact Section -->
     <section class="section-dark" id="contact" aria-label="Contact">

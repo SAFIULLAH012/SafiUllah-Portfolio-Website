@@ -604,6 +604,10 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     opacity: 1;
     max-width: 120px;
 }
+
+body.cookie-visible { padding-bottom: 80px; }
+body.cookie-visible .sticky-wa-cta { bottom: calc(5.5rem + 80px); }
+
 /* On mobile, show fully expanded */
 @media (max-width: 768px) {
     .sticky-wa-cta {
@@ -613,6 +617,7 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
         font-size: 1.3rem;
         max-width: 200px;
     }
+    body.cookie-visible .sticky-wa-cta { bottom: calc(1.5rem + 90px); }
     .sticky-wa-cta .sticky-wa-label {
         opacity: 1;
         max-width: 120px;

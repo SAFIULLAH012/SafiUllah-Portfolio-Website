@@ -7,7 +7,7 @@
 {% block extra_css %}
 <!-- JSON-LD Structured Data for Project -->
 <script type="application/ld+json">
-{
+[{
   "@context": "https://schema.org",
   "@type": "SoftwareSourceCode",
   "name": "{{ project.title }}",
@@ -19,7 +19,30 @@
   "programmingLanguage": "Python",
   "codeRepository": "{{ project.github_url or '' }}",
   "keywords": "AI, Machine Learning, Deep Learning, Computer Vision, {{ project.category }}"
-}
+},
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "{{ request.url_root }}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Projects",
+      "item": "{{ request.url_root }}#projects"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "{{ project.title }}"
+    }
+  ]
+}]
 </script>
 {% endblock %}
 

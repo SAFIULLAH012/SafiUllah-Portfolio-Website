@@ -164,15 +164,25 @@ function initContactForm() {
             const data = await res.json();
 
             if (res.ok && data.success) {
-                showToast("✅ " + (data.message || "Thank you! Your message has been sent."));
-                form.reset();
+                // GA4 tracking
+                if (typeof gtag === 'function') {
+                    gtag('event', 'form_submit', {
+                        'event_category': 'Contact',
+                        'event_label': 'Portfolio Form'
+                    });
+                }
+                const nameStr = encodeURIComponent(formData.get("name") || "");
+                const emailStr = encodeURIComponent(formData.get("email") || "");
+                window.location.href = `/thank-you?name=${nameStr}&email=${emailStr}`;
             } else {
                 showToast("❌ " + (data.message || "Failed to send message. Please check your inputs."), true);
+                if (submitBtn) submitBtn.disabled = false;
+                if (btnText) btnText.style.display = "inline-flex";
+                if (btnLoading) btnLoading.style.display = "none";
             }
         } catch (err) {
             console.error("Submission error:", err);
             showToast("❌ Network error. Please check your connection and try again.", true);
-        } finally {
             if (submitBtn) submitBtn.disabled = false;
             if (btnText) btnText.style.display = "inline-flex";
             if (btnLoading) btnLoading.style.display = "none";
@@ -180,7 +190,6 @@ function initContactForm() {
     });
 }
 
-// ==========================================
 // ==========================================
 // Canvas Particles Engine
 // ==========================================
@@ -194,8 +203,8 @@ function initParticleCanvas(canvasId) {
         return;
     }
 
-    // Disable heavy particle animation on low-power / small screens if needed
-    if (window.innerWidth < 640) {
+    // Performance fix: Disable on mobile/tablets (<768px)
+    if (window.innerWidth < 768) {
         canvas.style.display = "none";
         return;
     }
@@ -203,11 +212,37 @@ function initParticleCanvas(canvasId) {
     const ctx = canvas.getContext("2d");
     let width = canvas.width = canvas.parentElement.offsetWidth;
     let height = canvas.height = canvas.parentElement.offsetHeight;
-    let isVisible = true;
+    let isVisible = false;
     let animFrameId = null;
 
+    // Only animate when in viewport
+    if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isVisible = true;
+                    if (!animFrameId) animate();
+                } else {
+                    isVisible = false;
+                    if (animFrameId) {
+                        cancelAnimationFrame(animFrameId);
+                        animFrameId = null;
+                    }
+                }
+            });
+        }, { threshold: 0.1 });
+        observer.observe(canvas.parentElement);
+    } else {
+        isVisible = true;
+    }
+
     window.addEventListener("resize", () => {
-        if (!canvas.parentElement) return;
+        if (!canvas.parentElement || window.innerWidth < 768) {
+            canvas.style.display = "none";
+            isVisible = false;
+            return;
+        }
+        canvas.style.display = "block";
         width = canvas.width = canvas.parentElement.offsetWidth;
         height = canvas.height = canvas.parentElement.offsetHeight;
     });
