@@ -129,16 +129,16 @@ def register_seo_routes(app: Flask) -> None:
 
         # Dynamic project pages
         try:
-            with app.app_context():
-                projects = Project.query.filter_by(is_active=True).all()
-                for p in projects:
-                    pages.append({
-                        "loc": f"{host}/projects/{p.slug}",
-                        "priority": "0.8",
-                        "changefreq": "monthly",
-                    })
+            projects = Project.query.filter_by(published=True).all()
+            for p in projects:
+                pages.append({
+                    "loc": f"{host}/projects/{p.slug}",
+                    "priority": "0.8",
+                    "changefreq": "monthly",
+                })
         except Exception:
             pass
+
 
         xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>']
         xml_lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
