@@ -135,15 +135,77 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='5.7') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css', v='5.8') }}">
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     <a href="#main-content" class="skip-link sr-only" style="position: absolute; top: -100px; left: 1rem; z-index: 9999; padding: 0.5rem 1rem; background: var(--dark, #0f172a); color: var(--primary, #5fbcb8); border-radius: 4px; transition: top 0.2s;" onfocus="this.style.top='1rem'" onblur="this.style.top='-100px'">Skip to main content</a>
 
+    <!-- ══ COOKIE CONSENT BANNER ══ -->
+    <div id="cookie-banner" role="dialog" aria-label="Cookie consent" aria-live="polite" style="display:none;">
+        <div class="cookie-inner">
+            <p><i class="fas fa-cookie-bite"></i> This site uses cookies &amp; analytics to improve your experience. <a href="/privacy-policy" style="color:var(--primary);">Privacy Policy</a></p>
+            <div class="cookie-btns">
+                <button id="cookie-accept" class="btn btn-primary btn-sm">Accept</button>
+                <button id="cookie-decline" class="btn btn-outline btn-sm">Decline</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ STICKY MOBILE WHATSAPP CTA ══ -->
+    <a href="https://wa.me/923477845540?text=Hi%20Safi%20Ullah,%20I%20saw%20your%20portfolio"
+       class="sticky-wa-cta"
+       target="_blank"
+       rel="noopener noreferrer"
+       aria-label="Chat with Safi Ullah on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+        <span class="sticky-wa-label">Chat with Me</span>
+    </a>
+
     {% block body %}{% endblock %}
 
-    <script src="{{ url_for('static', filename='js/script.js', v='4.0') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js', v='4.1') }}"></script>
+
+    <!-- ══ GOOGLE ANALYTICS GA4 — Loads only after cookie consent ══ -->
+    <script>
+    (function(){
+        function loadGA(){
+            if(document.getElementById('ga4-script')) return;
+            var s = document.createElement('script');
+            s.id = 'ga4-script';
+            s.async = true;
+            s.src = 'https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX';
+            document.head.appendChild(s);
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', 'G-XXXXXXXXXX', { anonymize_ip: true });
+            window.gtag = gtag;
+        }
+
+        var banner = document.getElementById('cookie-banner');
+        var acceptBtn = document.getElementById('cookie-accept');
+        var declineBtn = document.getElementById('cookie-decline');
+
+        var consent = localStorage.getItem('safi_cookie_consent');
+        if(consent === 'accepted'){
+            loadGA();
+        } else if(consent === null){
+            banner.style.display = 'block';
+        }
+
+        acceptBtn.addEventListener('click', function(){
+            localStorage.setItem('safi_cookie_consent', 'accepted');
+            banner.style.display = 'none';
+            loadGA();
+        });
+        declineBtn.addEventListener('click', function(){
+            localStorage.setItem('safi_cookie_consent', 'declined');
+            banner.style.display = 'none';
+        });
+    })();
+    </script>
+
     {% block extra_js %}{% endblock %}
 </body>
 </html>

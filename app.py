@@ -92,7 +92,7 @@ def create_app(env: str | None = None) -> Flask:
 
 
 def register_seo_routes(app: Flask) -> None:
-    """Register robots.txt and sitemap.xml for Google indexing."""
+    """Register robots.txt, sitemap.xml, and legal pages for SEO."""
     from flask import Response, request as flask_request
     from models import Project
 
@@ -123,6 +123,8 @@ def register_seo_routes(app: Flask) -> None:
             {"loc": f"{host}/#projects", "priority": "0.9", "changefreq": "weekly"},
             {"loc": f"{host}/#education", "priority": "0.7", "changefreq": "monthly"},
             {"loc": f"{host}/#contact", "priority": "0.7", "changefreq": "monthly"},
+            {"loc": f"{host}/privacy-policy", "priority": "0.4", "changefreq": "yearly"},
+            {"loc": f"{host}/terms", "priority": "0.4", "changefreq": "yearly"},
         ]
 
         # Dynamic project pages
@@ -151,7 +153,25 @@ def register_seo_routes(app: Flask) -> None:
 
         return Response("\n".join(xml_lines), mimetype="application/xml")
 
+    @app.route("/privacy-policy")
+    def privacy_policy():
+        from models import Settings
+        settings = Settings.query.first()
+        return render_template("privacy_policy.html", settings=settings)
 
+    @app.route("/terms")
+    def terms():
+        from models import Settings
+        settings = Settings.query.first()
+        return render_template("terms.html", settings=settings)
+
+    @app.route("/thank-you")
+    def thank_you():
+        from models import Settings
+        settings = Settings.query.first()
+        name = flask_request.args.get("name", "")
+        email = flask_request.args.get("email", "")
+        return render_template("thank_you.html", settings=settings, name=name, email=email)
 
 
 def register_error_handlers(app: Flask) -> None:

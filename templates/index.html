@@ -410,7 +410,9 @@
     <footer role="contentinfo">
         <p>&copy; {{ now().year if now is defined else 2026 }} {{ settings.name }} | AI &amp; Machine Learning Engineer &nbsp;·&nbsp;
             <a href="{{ settings.github_url }}" target="_blank" rel="noopener noreferrer" style="color: inherit;">GitHub</a> &nbsp;·&nbsp;
-            <a href="{{ settings.linkedin_url }}" target="_blank" rel="noopener noreferrer" style="color: inherit;">LinkedIn</a>
+            <a href="{{ settings.linkedin_url }}" target="_blank" rel="noopener noreferrer" style="color: inherit;">LinkedIn</a> &nbsp;·&nbsp;
+            <a href="/privacy-policy" style="color: inherit;">Privacy Policy</a> &nbsp;·&nbsp;
+            <a href="/terms" style="color: inherit;">Terms</a>
         </p>
     </footer>
 
@@ -418,3 +420,4 @@
     <div class="toast" id="toast" role="alert" aria-live="polite" aria-atomic="true"></div>
 
 {% endblock %}
+

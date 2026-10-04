@@ -503,6 +503,7 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     .badge-exp { top: 5px; right: -5px; }
     .badge-loc { bottom: 10px; left: -10px; }
 }
+}
 @media (max-width: 480px) {
     .hero { padding: 5rem 0 2rem; }
     .hero-image-ring { width: 160px; height: 160px; }
@@ -512,3 +513,196 @@ footer { background: var(--primary); color: var(--dark); text-align: center; pad
     .hero-name { font-size: 1.85rem; }
     .hero-role-wrapper { font-size: 1.25rem; height: 2rem; min-height: 2rem; }
 }
+
+/* ══════════════════════════════════════════════
+   COOKIE CONSENT BANNER
+══════════════════════════════════════════════ */
+#cookie-banner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    background: rgba(15, 23, 42, 0.97);
+    border-top: 2px solid var(--primary);
+    backdrop-filter: blur(12px);
+    padding: 1rem 1.5rem;
+    animation: slideUpBanner 0.4s ease;
+}
+@keyframes slideUpBanner {
+    from { transform: translateY(100%); }
+    to   { transform: translateY(0); }
+}
+.cookie-inner {
+    max-width: 900px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+.cookie-inner p {
+    color: #94a3b8;
+    font-size: 0.9rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.cookie-inner p i { color: var(--primary); font-size: 1.1rem; }
+.cookie-btns { display: flex; gap: 0.75rem; flex-shrink: 0; }
+.btn-sm { padding: 0.45rem 1.2rem; font-size: 0.85rem; border-radius: 8px; }
+.btn-outline {
+    background: transparent;
+    border: 1.5px solid var(--primary);
+    color: var(--primary);
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: all 0.3s;
+}
+.btn-outline:hover { background: var(--primary); color: #fff; }
+
+/* ══════════════════════════════════════════════
+   STICKY WHATSAPP CTA (Mobile + Desktop)
+══════════════════════════════════════════════ */
+.sticky-wa-cta {
+    position: fixed;
+    bottom: 5.5rem;
+    right: 1.5rem;
+    z-index: 9998;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #25d366;
+    color: #fff;
+    padding: 0.75rem 1rem;
+    border-radius: 50px;
+    font-size: 1.4rem;
+    text-decoration: none;
+    box-shadow: 0 4px 20px rgba(37,211,102,0.45);
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    overflow: hidden;
+    max-width: 54px;
+}
+.sticky-wa-cta .sticky-wa-label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    max-width: 0;
+    transition: opacity 0.3s, max-width 0.35s;
+    font-family: 'Poppins', sans-serif;
+}
+.sticky-wa-cta:hover {
+    max-width: 200px;
+    box-shadow: 0 6px 28px rgba(37,211,102,0.6);
+    transform: translateY(-2px);
+}
+.sticky-wa-cta:hover .sticky-wa-label {
+    opacity: 1;
+    max-width: 120px;
+}
+/* On mobile, show fully expanded */
+@media (max-width: 768px) {
+    .sticky-wa-cta {
+        bottom: 1.5rem;
+        right: 1rem;
+        padding: 0.7rem 1.1rem;
+        font-size: 1.3rem;
+        max-width: 200px;
+    }
+    .sticky-wa-cta .sticky-wa-label {
+        opacity: 1;
+        max-width: 120px;
+        font-size: 0.82rem;
+    }
+}
+
+/* ══════════════════════════════════════════════
+   LEGAL PAGES (Privacy Policy / Terms)
+══════════════════════════════════════════════ */
+.legal-page {
+    min-height: 100vh;
+    padding: 7rem 1.5rem 4rem;
+    max-width: 800px;
+    margin: 0 auto;
+    color: #e2e8f0;
+}
+.legal-page h1 {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+.legal-page .legal-meta {
+    font-size: 0.85rem;
+    color: #64748b;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+}
+.legal-page h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #fff;
+    margin: 2rem 0 0.75rem;
+}
+.legal-page p, .legal-page li {
+    font-size: 0.95rem;
+    color: #94a3b8;
+    line-height: 1.8;
+    margin-bottom: 0.5rem;
+}
+.legal-page ul { padding-left: 1.5rem; margin-bottom: 1rem; }
+.legal-page a { color: var(--primary); }
+.legal-back {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    transition: gap 0.2s;
+}
+.legal-back:hover { gap: 0.8rem; }
+
+/* ══════════════════════════════════════════════
+   THANK YOU PAGE
+══════════════════════════════════════════════ */
+.thankyou-page {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem;
+    background: var(--bg-dark);
+}
+.thankyou-icon {
+    font-size: 5rem;
+    color: var(--primary);
+    margin-bottom: 1.5rem;
+    animation: popIn 0.5s cubic-bezier(0.4,0,0.2,1);
+}
+@keyframes popIn {
+    0%   { transform: scale(0.5); opacity: 0; }
+    80%  { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+}
+.thankyou-page h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+}
+.thankyou-page p {
+    color: #94a3b8;
+    max-width: 480px;
+    line-height: 1.7;
+    margin-bottom: 2rem;
+}
+

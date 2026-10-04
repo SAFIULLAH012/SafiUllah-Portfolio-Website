@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Terms & Conditions — Safi Ullah Portfolio{% endblock %}
+{% block meta_description %}Terms and Conditions for safiulllah.pythonanywhere.com — the portfolio website of Safi Ullah, AI & Machine Learning Engineer from Pakistan.{% endblock %}
+
+{% block body %}
+<nav id="navbar">
+    <div class="nav-container" style="display:flex;align-items:center;padding:0 1.5rem;height:70px;">
+        <a href="/" style="color:var(--primary);font-weight:700;font-size:1.1rem;text-decoration:none;">
+            <i class="fas fa-arrow-left" style="margin-right:0.5rem;"></i>Safi Ullah
+        </a>
+    </div>
+</nav>
+
+<main id="main-content">
+    <div class="legal-page">
+        <a href="/" class="legal-back"><i class="fas fa-arrow-left"></i> Back to Portfolio</a>
+
+        <h1>Terms &amp; Conditions</h1>
+        <p class="legal-meta">Last updated: October 2026 &nbsp;·&nbsp; Effective immediately</p>
+
+        <p>By accessing and using <a href="https://safiulllah.pythonanywhere.com">safiulllah.pythonanywhere.com</a> (the "Site"), you accept and agree to be bound by the following terms. If you do not agree, please discontinue use of this Site.</p>
+
+        <h2>1. Intellectual Property</h2>
+        <p>All content on this Site — including project descriptions, code samples, design work, written content, and images — is the intellectual property of <strong>Safi Ullah</strong> unless otherwise stated. You may not reproduce, distribute, or use this content for commercial purposes without prior written permission.</p>
+
+        <h2>2. Portfolio Projects</h2>
+        <p>Projects displayed on this Site are for demonstration purposes. Some projects may use open-source libraries or datasets — their respective licenses apply. Links to GitHub repositories are provided where available.</p>
+
+        <h2>3. Contact Form</h2>
+        <p>By submitting the contact form, you agree that:</p>
+        <ul>
+            <li>The information you provide is accurate and truthful.</li>
+            <li>You will not submit spam, harmful, or illegal content.</li>
+            <li>Your submission may be used to respond to your inquiry via email.</li>
+        </ul>
+
+        <h2>4. Disclaimer</h2>
+        <p>This Site is provided "as is" without any warranties of any kind. Safi Ullah makes no guarantee regarding the accuracy, completeness, or availability of the Site at any given time. The Site may occasionally be unavailable due to maintenance or technical issues.</p>
+
+        <h2>5. External Links</h2>
+        <p>This Site contains links to third-party websites (GitHub, LinkedIn, WhatsApp, etc.). Safi Ullah is not responsible for the content or privacy practices of those external sites.</p>
+
+        <h2>6. Limitation of Liability</h2>
+        <p>To the fullest extent permitted by law, Safi Ullah shall not be liable for any indirect, incidental, or consequential damages arising from your use of this Site.</p>
+
+        <h2>7. Changes to These Terms</h2>
+        <p>These Terms may be updated at any time. Continued use of the Site after changes constitutes acceptance of the new Terms.</p>
+
+        <h2>8. Governing Law</h2>
+        <p>These Terms are governed by the laws of Pakistan. Any disputes shall be resolved in the courts of Punjab, Pakistan.</p>
+
+        <h2>9. Contact</h2>
+        <p>For any questions regarding these Terms, contact:<br>
+        <strong>Safi Ullah</strong><br>
+        📧 <a href="mailto:safiullah477845@gmail.com">safiullah477845@gmail.com</a><br>
+        📍 Layyah, Punjab, Pakistan</p>
+    </div>
+</main>
+
+<footer role="contentinfo" style="text-align:center;padding:2rem;color:#64748b;font-size:0.85rem;">
+    &copy; {{ now().year if now is defined else 2026 }} Safi Ullah &nbsp;·&nbsp;
+    <a href="/privacy-policy" style="color:var(--primary);">Privacy Policy</a> &nbsp;·&nbsp;
+    <a href="/terms" style="color:var(--primary);">Terms</a>
+</footer>
+{% endblock %}
