@@ -115,14 +115,9 @@ def register_seo_routes(app: Flask) -> None:
         host = flask_request.host_url.rstrip("/")
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-        # Static pages
+        # Static pages — NO anchor (#) URLs, Google ignores them
         pages = [
             {"loc": f"{host}/", "priority": "1.0", "changefreq": "weekly"},
-            {"loc": f"{host}/#about", "priority": "0.8", "changefreq": "monthly"},
-            {"loc": f"{host}/#skills", "priority": "0.8", "changefreq": "monthly"},
-            {"loc": f"{host}/#projects", "priority": "0.9", "changefreq": "weekly"},
-            {"loc": f"{host}/#education", "priority": "0.7", "changefreq": "monthly"},
-            {"loc": f"{host}/#contact", "priority": "0.7", "changefreq": "monthly"},
             {"loc": f"{host}/privacy-policy", "priority": "0.4", "changefreq": "yearly"},
             {"loc": f"{host}/terms", "priority": "0.4", "changefreq": "yearly"},
         ]
