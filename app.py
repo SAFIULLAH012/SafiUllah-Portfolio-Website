@@ -150,19 +150,19 @@ def register_seo_routes(app: Flask) -> None:
 
     @app.route("/privacy-policy")
     def privacy_policy():
-        from models import Settings
+        from models import SiteSettings as Settings
         settings = Settings.query.first()
         return render_template("privacy_policy.html", settings=settings)
 
     @app.route("/terms")
     def terms():
-        from models import Settings
+        from models import SiteSettings as Settings
         settings = Settings.query.first()
         return render_template("terms.html", settings=settings)
 
     @app.route("/thank-you")
     def thank_you():
-        from models import Settings
+        from models import SiteSettings as Settings
         settings = Settings.query.first()
         name = flask_request.args.get("name", "")
         email = flask_request.args.get("email", "")

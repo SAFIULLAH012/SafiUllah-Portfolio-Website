@@ -298,3 +298,7 @@ class SiteSettings(db.Model):
 
     def __repr__(self):
         return f"<SiteSettings id={self.id}>"
+
+
+# Alias for backward compatibility
+Settings = SiteSettings
