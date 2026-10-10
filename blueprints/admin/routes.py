@@ -108,6 +108,7 @@ def login():
                 else:
                     current_app.permanent_session_lifetime = timedelta(hours=8)
 
+                session.clear()
                 session.permanent = True
                 session["admin_id"] = admin.id
                 session["admin_username"] = admin.username

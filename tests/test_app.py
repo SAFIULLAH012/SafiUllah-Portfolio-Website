@@ -498,3 +498,29 @@ def test_production_config_validation(monkeypatch):
     # Should not raise
     ProductionConfig.validate()
 
+
+def test_legal_and_thank_you_routes(client):
+    """Verify /privacy-policy, /terms, and /thank-you render with HTTP 200."""
+    res_priv = client.get("/privacy-policy")
+    assert res_priv.status_code == 200
+    assert "Privacy Policy" in res_priv.get_data(as_text=True)
+
+    res_terms = client.get("/terms")
+    assert res_terms.status_code == 200
+    assert "Terms" in res_terms.get_data(as_text=True)
+
+    res_ty = client.get("/thank-you")
+    assert res_ty.status_code == 200
+    html_ty = res_ty.get_data(as_text=True)
+    assert "Message Sent" in html_ty
+    assert 'content="noindex, nofollow"' in html_ty
+
+
+def test_csp_allows_google_analytics(client):
+    """Ensure Content-Security-Policy allows GTM and GA4 domains."""
+    res = client.get("/")
+    assert res.status_code == 200
+    csp = res.headers.get("Content-Security-Policy", "")
+    assert "https://www.googletagmanager.com" in csp
+    assert "https://*.google-analytics.com" in csp
+

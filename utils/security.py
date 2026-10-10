@@ -144,15 +144,19 @@ def apply_security_headers(response):
     )
     response.headers["Content-Security-Policy"] = (
         "default-src 'self'; "
-        "script-src 'self' 'unsafe-inline'; "
+        "script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; "
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com "
         "https://cdnjs.cloudflare.com; "
         "font-src 'self' https://fonts.gstatic.com "
         "https://cdnjs.cloudflare.com; "
-        "img-src 'self' data: https://images.unsplash.com blob:; "
-        "connect-src 'self'; "
+        "img-src 'self' data: https://images.unsplash.com https://*.google-analytics.com https://*.googletagmanager.com blob:; "
+        "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; "
         "frame-ancestors 'none';"
     )
+    # Cache control for dynamic HTML responses
+    if response.mimetype == "text/html" and "Cache-Control" not in response.headers:
+        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+
     # Apply HSTS in production or HTTPS environments
     if current_app.config.get("SESSION_COOKIE_SECURE", False):
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
