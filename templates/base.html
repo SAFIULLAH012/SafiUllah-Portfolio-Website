@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- ══ PRIMARY SEO META ══ -->
-    <title>{% block title %}Safi Ullah | Computer Science & Machine Learning Portfolio{% endblock %}</title>
-    <meta name="description" content="{% block meta_description %}Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, Computer Science student at University of Layyah.{% endblock %}">
-    <meta name="keywords" content="Safi Ullah, SAFI ULLAH, safi ullah, SAFIULLAH, SafiUllah, safiullah, Safi Ullah portfolio, Safi Ullah machine learning, Safi Ullah computer science, Safi Ullah AI student, Safi Ullah computer vision, machine learning portfolio, AI student portfolio, computer vision portfolio, deep learning portfolio, Python ML developer, Pakistan, University of Layyah, SAFIULLAH012">
+    <title>{% block title %}Safi Ullah | AI & Machine Learning Engineer Portfolio{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Official portfolio of Safi Ullah, AI and Machine Learning Engineer specializing in Computer Vision, Deep Learning (CNNs), and Python applications.{% endblock %}">
+    <meta name="keywords" content="Safi Ullah, Machine Learning Engineer, Computer Vision, Deep Learning, AI Portfolio, Python, Layyah, Pakistan">
     <meta name="author" content="Safi Ullah">
     {% block robots %}
     <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
     <meta name="googlebot" content="index, follow">
     {% endblock %}
-    <meta name="revisit-after" content="7 days">
     <meta name="language" content="English">
     <meta name="google-site-verification" content="XH9kibBHJIuVUUgmxhZvvb_EzSKrf5-E5PQmVh4Tvac">
     <meta name="geo.region" content="PK">
-    <meta name="geo.placename" content="Pakistan">
+    <meta name="geo.placename" content="Layyah, Pakistan">
 
     <!-- ══ CANONICAL ══ -->
     <link rel="canonical" href="{{ request.base_url }}">
@@ -31,20 +30,20 @@
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Safi Ullah Portfolio">
     <meta property="og:locale" content="en_US">
-    <meta property="og:title" content="{% block og_title %}Safi Ullah | Computer Science & Machine Learning Portfolio{% endblock %}">
-    <meta property="og:description" content="{% block og_description %}Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, Computer Science student at University of Layyah.{% endblock %}">
+    <meta property="og:title" content="{% block og_title %}Safi Ullah | AI & Machine Learning Engineer Portfolio{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}Official portfolio of Safi Ullah, AI and Machine Learning Engineer specializing in Computer Vision, Deep Learning (CNNs), and Python applications.{% endblock %}">
     <meta property="og:url" content="{{ request.base_url }}">
     <meta property="og:image" content="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp', _external=True) }}">
     <meta property="og:image:width" content="1200">
     <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Safi Ullah - Computer Science & Machine Learning Portfolio">
+    <meta property="og:image:alt" content="Safi Ullah - AI & Machine Learning Engineer">
 
     <!-- ══ TWITTER CARD ══ -->
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:site" content="@SAFIULLAH012">
     <meta name="twitter:creator" content="@SAFIULLAH012">
-    <meta name="twitter:title" content="Safi Ullah | Computer Science & Machine Learning Portfolio">
-    <meta name="twitter:description" content="Explore Machine Learning, Computer Vision, and Deep Learning projects built by Safi Ullah, Computer Science student at University of Layyah.">
+    <meta name="twitter:title" content="Safi Ullah | AI & Machine Learning Engineer Portfolio">
+    <meta name="twitter:description" content="Official portfolio of Safi Ullah, AI and Machine Learning Engineer specializing in Computer Vision, Deep Learning (CNNs), and Python applications.">
     <meta name="twitter:image" content="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp', _external=True) }}">
 
     <!-- ══ JSON-LD STRUCTURED DATA — Person & Professional Service Schema ══ -->
@@ -53,19 +52,7 @@
       "@context": "https://schema.org",
       "@type": "Person",
       "name": "Safi Ullah",
-      "alternateName": [
-        "SafiUllah",
-        "safi ullah",
-        "SAFI ULLAH",
-        "Safiullah",
-        "safiullah",
-        "SAFIULLAH",
-        "Safi Ullah AI",
-        "safi ullah machine learning",
-        "safi ullah portfolio",
-        "SAFIULLAH012",
-        "safiullah012"
-      ],
+      "alternateName": ["Safiullah", "SAFIULLAH012"],
       "url": "{{ request.host_url }}",
       "image": {
         "@type": "ImageObject",

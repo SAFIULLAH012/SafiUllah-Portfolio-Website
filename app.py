@@ -112,35 +112,44 @@ def register_seo_routes(app: Flask) -> None:
     @app.route("/sitemap.xml")
     def sitemap_xml():
         from datetime import datetime, timezone
+        from models import Project, SiteSettings
         host = flask_request.host_url.rstrip("/")
         today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
 
-        # Static pages — NO anchor (#) URLs, Google ignores them
+        settings = None
+        try:
+            settings = SiteSettings.query.first()
+        except Exception:
+            pass
+
+        home_mod = settings.updated_at.strftime("%Y-%m-%d") if (settings and settings.updated_at) else today
+
         pages = [
-            {"loc": f"{host}/", "priority": "1.0", "changefreq": "weekly"},
-            {"loc": f"{host}/privacy-policy", "priority": "0.4", "changefreq": "yearly"},
-            {"loc": f"{host}/terms", "priority": "0.4", "changefreq": "yearly"},
+            {"loc": f"{host}/", "priority": "1.0", "changefreq": "weekly", "lastmod": home_mod},
+            {"loc": f"{host}/privacy-policy", "priority": "0.3", "changefreq": "yearly", "lastmod": "2026-10-10"},
+            {"loc": f"{host}/terms", "priority": "0.3", "changefreq": "yearly", "lastmod": "2026-10-10"},
         ]
 
-        # Dynamic project pages
+        # Dynamic project pages with authentic lastmod
         try:
-            projects = Project.query.filter_by(published=True).all()
+            projects = Project.query.filter_by(published=True).order_by(Project.display_order.asc()).all()
             for p in projects:
+                p_mod = p.updated_at.strftime("%Y-%m-%d") if p.updated_at else today
                 pages.append({
                     "loc": f"{host}/projects/{p.slug}",
                     "priority": "0.8",
                     "changefreq": "monthly",
+                    "lastmod": p_mod,
                 })
         except Exception:
             pass
-
 
         xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>']
         xml_lines.append('<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">')
         for page in pages:
             xml_lines.append("  <url>")
             xml_lines.append(f"    <loc>{page['loc']}</loc>")
-            xml_lines.append(f"    <lastmod>{today}</lastmod>")
+            xml_lines.append(f"    <lastmod>{page['lastmod']}</lastmod>")
             xml_lines.append(f"    <changefreq>{page['changefreq']}</changefreq>")
             xml_lines.append(f"    <priority>{page['priority']}</priority>")
             xml_lines.append("  </url>")
