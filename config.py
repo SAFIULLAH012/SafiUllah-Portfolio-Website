@@ -26,7 +26,8 @@ class Config:
 
     # ── Database ──────────────────────────────────────────────────────────────
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", "sqlite:///portfolio.db")
+    _default_db = os.path.join(_base_dir, "instance", "portfolio.db")
+    SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL", f"sqlite:///{_default_db}")
     SQLALCHEMY_ENGINE_OPTIONS = {
         "pool_pre_ping": True,
     }

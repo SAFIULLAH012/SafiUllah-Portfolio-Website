@@ -524,3 +524,33 @@ def test_csp_allows_google_analytics(client):
     assert "https://www.googletagmanager.com" in csp
     assert "https://*.google-analytics.com" in csp
 
+
+def test_admin_update_code_requires_login(client):
+    """Unauthenticated POST to /admin/system/update-code must redirect to login."""
+    res = client.post("/admin/system/update-code", follow_redirects=False)
+    assert res.status_code == 302
+    assert "/admin/login" in res.headers["Location"]
+
+
+def test_admin_update_code_authenticated(auth_client):
+    """Authenticated admin can invoke the update_code endpoint."""
+    res = auth_client.post("/admin/system/update-code", follow_redirects=True)
+    assert res.status_code == 200
+    # The dashboard should be returned with a flash message
+    html = res.get_data(as_text=True)
+    assert "GitHub Production Sync" in html
+
+
+def test_cache_control_headers_public_vs_admin(client, auth_client):
+    """Public pages should have public cache headers; admin pages should be no-store."""
+    res_pub = client.get("/")
+    assert res_pub.status_code == 200
+    cc_pub = res_pub.headers.get("Cache-Control", "")
+    assert "public" in cc_pub
+
+    res_admin = auth_client.get("/admin/dashboard")
+    assert res_admin.status_code == 200
+    cc_admin = res_admin.headers.get("Cache-Control", "")
+    assert "no-store" in cc_admin
+
+

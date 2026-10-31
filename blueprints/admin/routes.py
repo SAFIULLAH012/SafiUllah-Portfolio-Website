@@ -2,6 +2,8 @@
 Admin CMS blueprint routes.
 All routes except /admin/login require an authenticated session.
 """
+import os
+import subprocess
 import json
 import logging
 import re
@@ -266,7 +268,95 @@ def dashboard():
         .limit(5)
         .all()
     )
-    return render_template("admin/dashboard.html", stats=stats, recent_messages=recent_messages)
+    # Current git commit hash
+    git_commit = "unknown"
+    try:
+        repo_dir = current_app.root_path
+        res = subprocess.run(
+            ["git", "rev-parse", "--short", "HEAD"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=5
+        )
+        if res.returncode == 0:
+            git_commit = res.stdout.strip()
+    except Exception:
+        pass
+
+    return render_template(
+        "admin/dashboard.html",
+        stats=stats,
+        recent_messages=recent_messages,
+        git_commit=git_commit
+    )
+
+
+@admin_bp.route("/system/update-code", methods=["POST"])
+@login_required
+def update_code():
+    """
+    1-Click Production Update:
+    Pulls latest commits from GitHub ('git pull origin main')
+    and triggers a live server reload on PythonAnywhere by touching the WSGI file.
+    """
+    repo_dir = current_app.root_path
+    if not os.path.exists(os.path.join(repo_dir, ".git")):
+        flash("Git repository not found in application directory.", "danger")
+        return redirect(url_for("admin.dashboard"))
+
+    try:
+        result = subprocess.run(
+            ["git", "pull", "origin", "main"],
+            cwd=repo_dir,
+            capture_output=True,
+            text=True,
+            timeout=40
+        )
+        stdout = result.stdout.strip()
+        stderr = result.stderr.strip()
+
+        if result.returncode == 0:
+            msg = f"Git pull successful: {stdout}"
+
+            # Auto-reload PythonAnywhere WSGI worker
+            reloaded = False
+            wsgi_candidates = [
+                "/var/www/safiulllah_pythonanywhere_com_wsgi.py",
+            ]
+            if os.path.exists("/var/www"):
+                try:
+                    for f in os.listdir("/var/www"):
+                        if f.endswith("_wsgi.py"):
+                            wsgi_candidates.append(os.path.join("/var/www", f))
+                except Exception:
+                    pass
+
+            for wsgi_file in wsgi_candidates:
+                if os.path.exists(wsgi_file):
+                    try:
+                        os.utime(wsgi_file, None)
+                        reloaded = True
+                        logger.info("Touched WSGI file: %s", wsgi_file)
+                        break
+                    except Exception as e:
+                        logger.warning("Failed touching WSGI file %s: %s", wsgi_file, e)
+
+            if reloaded:
+                msg += " | Server reload triggered instantly! 🚀"
+            else:
+                msg += " | Code updated! (WSGI file touched or pending restart)"
+
+            flash(msg, "success")
+        else:
+            flash(f"Git pull failed (code {result.returncode}): {stderr or stdout}", "danger")
+    except subprocess.TimeoutExpired:
+        flash("Git pull operation timed out after 40 seconds.", "danger")
+    except Exception as e:
+        logger.exception("Error executing update_code")
+        flash(f"An unexpected error occurred during update: {str(e)}", "danger")
+
+    return redirect(url_for("admin.dashboard"))
 
 
 # ─────────────────────────────────────────────────────────────────────────────

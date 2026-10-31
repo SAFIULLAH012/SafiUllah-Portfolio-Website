@@ -73,6 +73,32 @@
     </div>
 </div>
 
+<!-- 1-Click GitHub Deploy / Server Sync -->
+<div class="section-card" style="border-left: 4px solid var(--primary, #0ea5e9);">
+    <div class="card-header-row" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
+            <h3 class="card-title" style="margin: 0; display: flex; align-items: center; gap: 0.5rem;">
+                <i class="fab fa-github" style="color: #6366f1;"></i> GitHub Production Sync
+            </h3>
+            <p style="margin: 0.25rem 0 0 0; color: #64748b; font-size: 0.88rem;">
+                Pull latest code directly from GitHub and trigger an automatic PythonAnywhere server reload without opening bash console.
+            </p>
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <span style="background: #f1f5f9; padding: 0.35rem 0.75rem; border-radius: 6px; font-family: monospace; font-size: 0.85rem; color: #334155; border: 1px solid #cbd5e1;">
+                Commit: <strong>{{ git_commit }}</strong>
+            </span>
+            <form method="POST" action="{{ url_for('admin.update_code') }}" style="margin: 0;"
+                  onsubmit="return confirm('Fetch latest code from GitHub (main branch) and reload PythonAnywhere server?');">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <button type="submit" class="action-btn action-btn--primary" style="background: #6366f1; border-color: #6366f1; display: inline-flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                    <i class="fas fa-cloud-download-alt"></i> Pull Latest Code &amp; Reload
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
 <!-- Recent Messages -->
 <div class="section-card">
     <div class="card-header-row">

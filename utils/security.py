@@ -153,9 +153,14 @@ def apply_security_headers(response):
         "connect-src 'self' https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com; "
         "frame-ancestors 'none';"
     )
-    # Cache control for dynamic HTML responses
-    if response.mimetype == "text/html" and "Cache-Control" not in response.headers:
-        response.headers["Cache-Control"] = "no-cache, must-revalidate"
+    # Cache control: strict no-cache for admin, public caching for public content
+    if "Cache-Control" not in response.headers:
+        from flask import request
+        if request.path.startswith("/admin"):
+            response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+            response.headers["Pragma"] = "no-cache"
+        elif response.mimetype == "text/html":
+            response.headers["Cache-Control"] = "public, max-age=600, stale-while-revalidate=3600"
 
     # Apply HSTS in production or HTTPS environments
     if current_app.config.get("SESSION_COOKIE_SECURE", False):
