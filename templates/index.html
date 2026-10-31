@@ -78,9 +78,9 @@
                         </a>
                     </div>
                 </div>
-                <div class="hero-image-wrapper reveal" aria-hidden="true">
+                <div class="hero-image-wrapper reveal">
                     <div class="hero-image-ring">
-                        <div class="rotating-border"></div>
+                        <div class="rotating-border" aria-hidden="true"></div>
                         <img src="{{ url_for('static', filename=settings.profile_image.replace('.jpg', '.webp').replace('.jpeg', '.webp') if settings and settings.profile_image else 'img/safi-ullah.webp') }}" alt="Safi Ullah - AI & Machine Learning Engineer, Computer Vision Specialist from Pakistan" title="Safi Ullah" class="hero-img" loading="eager" width="330" height="330">
                         <div class="badge badge-exp"><i class="fas fa-code-branch"></i><div><strong>{{ settings.projects_badge_count or '7+' }}</strong> Projects</div></div>
                         <div class="badge badge-loc"><div class="badge-dot" style="background: #22c55e;"></div><div>Available for Hire</div></div>
